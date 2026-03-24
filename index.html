@@ -643,6 +643,131 @@ body {
 .tab-content { display: none; flex-direction: column; flex: 1; }
 .tab-content.active { display: flex; }
 
+/* Chat */
+.chat-messages {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 10px; padding: 8px 0 12px;
+}
+
+.chat-bubble {
+  display: flex; gap: 8px;
+  max-width: 90%;
+  animation: cardSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-bubble.bot { align-self: flex-start; }
+.chat-bubble.user { align-self: flex-end; flex-direction: row-reverse; }
+
+.chat-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+  background: var(--card2);
+  border: 1px solid var(--border);
+}
+
+.chat-bubble.user .chat-avatar {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  font-size: 0.8rem;
+}
+
+.chat-text {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+.chat-bubble.user .chat-text {
+  background: linear-gradient(135deg, rgba(0,230,167,0.12), rgba(0,201,255,0.08));
+  border-color: rgba(0,230,167,0.2);
+  color: var(--text);
+}
+
+.chat-text .note-preview {
+  background: rgba(0,230,167,0.08);
+  border: 1px solid rgba(0,230,167,0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.chat-text .save-prompt {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+
+.chat-text .save-prompt button {
+  padding: 6px 16px;
+  border: none; border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; transition: transform 0.2s;
+}
+
+.chat-text .save-prompt button:active { transform: scale(0.92); }
+
+.save-yes {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+}
+
+.save-edit {
+  background: var(--card2);
+  color: var(--text);
+  border: 1px solid var(--border) !important;
+}
+
+.chat-input-area {
+  display: flex; gap: 8px;
+  padding: 8px 0;
+}
+
+.chat-input-area input {
+  flex: 1;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  color: var(--text);
+  padding: 12px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+
+.chat-input-area input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.chat-input-area input::placeholder { color: #3a3a5a; }
+
+.typing-dots {
+  display: inline-flex; gap: 4px; padding: 4px 0;
+}
+
+.typing-dots span {
+  width: 6px; height: 6px;
+  background: var(--muted);
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
 /* Scrollbar */
 .notes-list::-webkit-scrollbar { width: 4px; }
 .notes-list::-webkit-scrollbar-track { background: transparent; }
@@ -735,6 +860,7 @@ body {
   <!-- Tabs -->
   <div class="tab-bar">
     <button class="tab active" data-tab="write">✏️ Write</button>
+    <button class="tab" data-tab="chat">🤖 AI Chat</button>
     <button class="tab" data-tab="history">📚 History</button>
   </div>
 
@@ -750,6 +876,26 @@ body {
       </div>
     </div>
     <div class="notes-list" id="today-notes"></div>
+  </div>
+
+  <!-- AI Chat tab -->
+  <div class="tab-content" id="tab-chat">
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-bubble bot">
+        <div class="chat-avatar">🌱</div>
+        <div class="chat-text">Hey! I'm your plant buddy. Tell me what's on your mind and I'll turn it into a note for you. You can say things like:<br><br>
+        ✨ "I need to finish my project by Friday"<br>
+        💡 "Had a great idea about a new app"<br>
+        📝 "Meeting at 3pm with the team"<br>
+        🎯 "Goals for this week: exercise, read, code"</div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Tell me what to note down..." autocomplete="off">
+      <button id="chat-send" class="send-btn">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
   </div>
 
   <!-- History tab -->
@@ -1103,6 +1249,234 @@ function render(){
   renderXP();
   renderStats();
   renderTodayNotes();
+}
+
+// AI Chat
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+
+document.getElementById('chat-send').addEventListener('click', sendChat);
+chatInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter') { e.preventDefault(); sendChat(); }
+});
+
+function sendChat() {
+  const text = chatInput.value.trim();
+  if(!text) return;
+  chatInput.value = '';
+
+  // Add user bubble
+  addChatBubble('user', text, '😊');
+
+  // Show typing
+  const typingId = 'typing-' + Date.now();
+  setTimeout(() => {
+    addTypingBubble(typingId);
+    
+    // Process after "thinking"
+    setTimeout(() => {
+      removeTypingBubble(typingId);
+      processChat(text);
+    }, 800 + Math.random() * 700);
+  }, 200);
+}
+
+function processChat(input) {
+  const lower = input.toLowerCase();
+  let noteText = '';
+  let response = '';
+  
+  // Smart processing
+  if(lower.startsWith('remind me to ') || lower.startsWith('remember to ')) {
+    noteText = input.replace(/^(remind me to |remember to )/i, '').trim();
+    noteText = noteText.charAt(0).toUpperCase() + noteText.slice(1);
+    response = "Got it! I've turned that into a reminder note:";
+  }
+  else if(lower.startsWith('note:') || lower.startsWith('note -')) {
+    noteText = input.replace(/^note[\s:\-]+/i, '').trim();
+    response = "Clean note created:";
+  }
+  else if(lower.includes('goal') || lower.includes('target') || lower.includes('aim')) {
+    noteText = '🎯 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Nice goal! Saved it:";
+  }
+  else if(lower.includes('idea')) {
+    noteText = '💡 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Love that idea! Captured it:";
+  }
+  else if(lower.includes('meeting') || lower.includes('call') || lower.includes('appointment')) {
+    noteText = '📅 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Event noted:";
+  }
+  else if(lower.includes('todo') || lower.includes('to do') || lower.includes('to-do') || lower.includes('need to') || lower.includes('have to') || lower.includes('must')) {
+    noteText = '✅ ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Added to your to-do:";
+  }
+  else if(lower.includes('learn') || lower.includes('study') || lower.includes('read')) {
+    noteText = '📚 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Learning note saved:";
+  }
+  else if(lower.includes('bug') || lower.includes('fix') || lower.includes('error') || lower.includes('issue')) {
+    noteText = '🐛 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Bug tracked:";
+  }
+  else if(lower.includes('grateful') || lower.includes('thankful') || lower.includes('happy') || lower.includes('love')) {
+    noteText = '❤️ ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "What a lovely thought! Saved:";
+  }
+  else if(lower.match(/^\d|^(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight)/i)) {
+    noteText = '📅 ' + input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Scheduled note:";
+  }
+  else if(lower.includes('list') || lower.includes(':') || lower.includes(',')) {
+    // Detect lists
+    const items = input.split(/[,\n]/).map(s => s.trim()).filter(s => s);
+    if(items.length > 1) {
+      noteText = items.map(item => '• ' + item.charAt(0).toUpperCase() + item.slice(1)).join('\n');
+      response = "I formatted that as a list:";
+    } else {
+      noteText = input.charAt(0).toUpperCase() + input.slice(1);
+      response = "Note saved:";
+    }
+  }
+  else if(input.length < 20) {
+    noteText = input.charAt(0).toUpperCase() + input.slice(1);
+    response = "Quick note saved:";
+  }
+  else {
+    noteText = input.charAt(0).toUpperCase() + input.slice(1);
+    const responses = [
+      "Great thought! I've noted that down:",
+      "Saved that for you:",
+      "Good one! Here's your note:",
+      "Captured! Your plant thanks you:",
+      "Written down! Keep the notes flowing:"
+    ];
+    response = responses[Math.floor(Math.random() * responses.length)];
+  }
+
+  // Greeting handling
+  if(lower.match(/^(hi|hey|hello|sup|yo|what's up|howdy)/)) {
+    const greetings = [
+      "Hey there! 👋 What would you like to note down?",
+      "Hi! Ready to capture some thoughts? 🌱",
+      "Hey! Tell me what's on your mind and I'll save it as a note ✨",
+      "What's up! 🌿 Drop a thought and I'll grow it into a note."
+    ];
+    addChatBubble('bot', greetings[Math.floor(Math.random()*greetings.length)], '🌱');
+    return;
+  }
+
+  if(lower.match(/^(thanks|thank you|thx|cheers|nice one)/)) {
+    const thanks = [
+      "You're welcome! Keep those notes coming 🌱",
+      "No problem! Your plant is looking healthier already ✨",
+      "Anytime! That's what I'm here for 💚"
+    ];
+    addChatBubble('bot', thanks[Math.floor(Math.random()*thanks.length)], '🌱');
+    return;
+  }
+
+  if(lower.match(/^(how|what|when|where|why|who|can you|do you)/)) {
+    addChatBubble('bot', "I'm your note-taking buddy! Just tell me something and I'll turn it into a neat note. Try things like \"remind me to call mom\" or \"idea for a new project\" 🌱", '🌱');
+    return;
+  }
+
+  // Show note preview with save option
+  const noteId = Date.now();
+  const botHtml = `${response}
+    <div class="note-preview">${esc(noteText).replace(/\n/g,'<br>')}</div>
+    <div class="save-prompt">
+      <button class="save-yes" onclick="saveChatNote(${noteId})">Save ✓</button>
+      <button class="save-edit" onclick="editChatNote(${noteId})">Edit ✎</button>
+    </div>`;
+  
+  // Store pending note
+  window._pendingNotes = window._pendingNotes || {};
+  window._pendingNotes[noteId] = noteText;
+  
+  addChatBubble('bot', botHtml, '🌱', true);
+  scrollChat();
+}
+
+function saveChatNote(noteId) {
+  const text = window._pendingNotes[noteId];
+  if(!text) return;
+  delete window._pendingNotes[noteId];
+
+  // Save note using existing function
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+
+  if(state.lastNoteDate){
+    const lastDay = new Date(state.lastNoteDate).toISOString().split('T')[0];
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate()-1);
+    if(lastDay===today){}
+    else if(lastDay===yesterday.toISOString().split('T')[0]){state.streak++;}
+    else{state.streak=1;}
+  } else { state.streak=1; }
+
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
+  state.lastNoteDate = now.toISOString();
+  state.notes.unshift({id:Date.now(),text,date:now.toISOString(),day:today});
+  state.health = Math.min(100, state.health+10);
+  state.xp += 10 + Math.floor(text.length/15);
+
+  const xpNeeded = state.level * 50;
+  if(state.xp >= xpNeeded){
+    state.xp -= xpNeeded;
+    state.level++;
+    showLevelUp();
+  }
+
+  save();
+  spawnWaterDrops();
+  spawnSparkles();
+  render();
+
+  addChatBubble('bot', "Saved! 🌱 Your plant just grew a little. Keep going!", '🌱');
+}
+
+function editChatNote(noteId) {
+  const text = window._pendingNotes[noteId];
+  if(!text) return;
+  chatInput.value = text;
+  chatInput.focus();
+  delete window._pendingNotes[noteId];
+  addChatBubble('bot', "I put the text back in the input — edit it and send again! ✏️", '🌱');
+}
+
+function addChatBubble(type, content, avatar, isHtml) {
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + type;
+  bubble.innerHTML = `
+    <div class="chat-avatar">${avatar || (type==='bot'?'🌱':'😊')}</div>
+    <div class="chat-text">${isHtml ? content : esc(content)}</div>
+  `;
+  chatMessages.appendChild(bubble);
+  scrollChat();
+}
+
+function addTypingBubble(id) {
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble bot';
+  bubble.id = id;
+  bubble.innerHTML = `
+    <div class="chat-avatar">🌱</div>
+    <div class="chat-text"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+  `;
+  chatMessages.appendChild(bubble);
+  scrollChat();
+}
+
+function removeTypingBubble(id) {
+  const el = document.getElementById(id);
+  if(el) el.remove();
+}
+
+function scrollChat() {
+  setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 50);
 }
 
 // Init
