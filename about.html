@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a1a">
+<title>About GroWthink 🌱</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{--bg:#0a0a1a;--card:rgba(17,17,40,0.85);--accent:#00e6a7;--accent2:#00c9ff;--text:#e8e8f0;--muted:#5a5a7a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.bg{position:fixed;inset:0;background:linear-gradient(180deg,#0a0a1a,#0d1b2a 30%,#1a1a2e 60%,#0f0f23);z-index:0}
+.stars{position:fixed;inset:0;z-index:1}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:1}}
+.page{position:relative;z-index:2;max-width:700px;margin:0 auto;padding:24px 20px 60px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:12px;background:rgba(0,230,167,.08);border:1px solid rgba(0,230,167,.15);transition:all .2s;margin-bottom:24px}
+.back-btn:hover{background:rgba(0,230,167,.15)}
+
+.hero{text-align:center;padding:40px 0 30px}
+.hero-emoji{font-size:4rem;margin-bottom:8px;display:block}
+.hero h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.hero p{color:rgba(255,255,255,.5);font-size:1rem;max-width:400px;margin:0 auto;line-height:1.6}
+.hero-badges{display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.hero-badge{font-size:.75rem;padding:4px 12px;border-radius:20px;font-weight:700}
+.badge-green{background:rgba(0,230,167,.12);color:var(--accent);border:1px solid rgba(0,230,167,.2)}
+.badge-blue{background:rgba(0,201,255,.12);color:var(--accent2);border:1px solid rgba(0,201,255,.2)}
+.badge-purple{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.2)}
+
+.section{margin-bottom:32px}
+.section-title{font-size:1.3rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title .icon{font-size:1.4rem}
+.section-subtitle{font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:16px;line-height:1.6}
+
+.card{background:var(--card);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:20px;margin-bottom:12px}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.card-icon{font-size:1.5rem}
+.card-title{font-size:1rem;font-weight:800}
+.card-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.6}
+
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.feature-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center;transition:all .2s}
+.feature-card:hover{border-color:rgba(0,230,167,.2);transform:translateY(-2px)}
+.feature-icon{font-size:1.8rem;margin-bottom:6px}
+.feature-name{font-size:.8rem;font-weight:700;margin-bottom:2px}
+.feature-desc{font-size:.68rem;color:rgba(255,255,255,.35);line-height:1.4}
+
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent2),#a855f7,#f97316,#ec4899)}
+.tl-item{position:relative;margin-bottom:20px;padding-left:20px}
+.tl-item::before{content:'';position:absolute;left:-20px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}
+.tl-version{font-size:.9rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tl-desc{font-size:.8rem;color:rgba(255,255,255,.4);margin-top:4px;line-height:1.5}
+.tl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tl-tag{font-size:.65rem;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.4);font-weight:600}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center}
+.stat-num{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.65rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+.tech-list{display:flex;flex-wrap:wrap;gap:8px}
+.tech-pill{font-size:.75rem;padding:6px 14px;border-radius:12px;font-weight:700;background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08)}
+.tech-pill.highlight{background:rgba(0,230,167,.1);color:var(--accent);border-color:rgba(0,230,167,.2)}
+
+.footer{text-align:center;padding:30px 0;color:rgba(255,255,255,.3);font-size:.8rem}
+.footer a{color:var(--accent);text-decoration:none;font-weight:700}
+
+@media(max-width:480px){
+  .feature-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:1.8rem}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="stars" id="stars"></div>
+
+<div class="page">
+<a href="index.html" class="back-btn">← Back to App</a>
+
+<div class="hero">
+  <span class="hero-emoji">🌱</span>
+  <h1>GroWthink</h1>
+  <p>A mindful note-taking app where your thoughts grow a living plant. Write, reflect, and watch your garden flourish.</p>
+  <div class="hero-badges">
+    <span class="hero-badge badge-green">v5.1</span>
+    <span class="hero-badge badge-blue">PWA</span>
+    <span class="hero-badge badge-purple">Free & Open Source</span>
+  </div>
+</div>
+
+<!-- How It Works -->
+<div class="section">
+  <div class="section-title"><span class="icon">🎯</span> How It Works</div>
+  <div class="card">
+    <div class="card-desc">
+      GroWthink combines journaling with gamification. Every note you write <strong style="color:var(--accent)">waters your virtual plant</strong>, earning XP and keeping it alive. Skip a day? Your plant's health drops. Build streaks, unlock achievements, and watch your garden grow as your mind does.<br><br>
+      <strong style="color:var(--accent2)">The core loop:</strong> Write → Earn XP → Level Up → Plant Grows → Unlock Rewards → Keep Writing
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">17+</div><div class="stat-label">Features</div></div>
+    <div class="stat-box"><div class="stat-num">2K+</div><div class="stat-label">Lines of Code</div></div>
+    <div class="stat-box"><div class="stat-num">5</div><div class="stat-label">Versions</div></div>
+  </div>
+</div>
+
+<!-- Core Features -->
+<div class="section">
+  <div class="section-title"><span class="icon">✨</span> Core Features</div>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="feature-icon">📝</div><div class="feature-name">Smart Notes</div><div class="feature-desc">Write with mood tracking, categories, tags, and markdown support</div></div>
+    <div class="feature-card"><div class="feature-icon">🌱</div><div class="feature-name">Living Plant</div><div class="feature-desc">SVG plant grows with your notes — 4 species, dynamic DNA traits</div></div>
+    <div class="feature-card"><div class="feature-icon">🤖</div><div class="feature-name">AI Chat</div><div class="feature-desc">Conversational note capture — just tell it what you're thinking</div></div>
+    <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-name">Insights</div><div class="feature-desc">Weekly review, word cloud, sentiment analysis, activity heatmap</div></div>
+    <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-name">Gamification</div><div class="feature-desc">XP, levels, streaks, badges, daily challenges, shop with cosmetics</div></div>
+    <div class="feature-card"><div class="feature-icon">🎵</div><div class="feature-name">Ambient Sound</div><div class="feature-desc">Lo-fi music engine + 5 soundscapes that adapt to your typing</div></div>
+  </div>
+</div>
+
+<!-- All Features -->
+<div class="section">
+  <div class="section-title"><span class="icon">🚀</span> Full Feature List</div>
+  
+  <div class="card">
+    <div class="card-header"><span class="card-icon">✏️</span><div class="card-title">Writing & Input</div></div>
+    <div class="card-desc">• Rich note-taking with markdown (bold, italic, code)<br>• Mood selector (😊😐😔🔥💡❤️)<br>• Categories: Work, Personal, Ideas, Journal<br>• Auto-tagging with #hashtags<br>• Smart tag suggestions while typing<br>• Focus mode — distraction-free fullscreen writing<br>• Speech-to-text with microphone<br>• Photo notes with camera capture<br>• Voice recording notes<br>• Note templates (Gratitude, Meeting, Reflection, Brain Dump)<br>• Daily writing prompts</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">🌿</span><div class="card-title">Plant & Garden</div></div>
+    <div class="card-desc">• 4 plant species: Flower, Cactus, Bonsai, Vine<br>• Procedural SVG rendering — every plant is unique<br>• Plant DNA system — 8 genetic traits per plant<br>• Mutations (costs 100 XP) and new seeds (200 XP)<br>• Multi-plant garden — 4 pots tied to note categories<br>• Evolution stages: Sprout → Sapling → Bloom → Ancient → Legendary<br>• Plant personality with speech bubbles<br>• Pet companion system (Cat, Bird, Frog, Butterfly, Squirrel)<br>• Cosmetic shop: hats, accessories, effects, special pots</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">📈</span><div class="card-title">Analytics & Intelligence</div></div>
+    <div class="card-desc">• Weekly review card — auto-generated insights<br>• Word cloud — see your most-used words<br>• Sentiment analysis — keyword scoring + 30-day trend line<br>• 90-day activity heatmap<br>• Weekly notes chart<br>• Mood breakdown visualization<br>• Location-tagged notes with interactive Leaflet.js map<br>• Mind map generator — canvas-based interactive thought graph<br>• Personal records tracking (longest note, most productive day, etc)</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">🏆</span><div class="card-title">Gamification</div></div>
+    <div class="card-desc">• XP system — earn points for every note<br>• 20+ levels with level-up animations<br>• 12 achievement badges (First Seed, Night Owl, Centurion...)<br>• Daily challenges with XP rewards<br>• Weekly challenges — beat last week's count<br>• Streak system with freeze protection<br>• Pomodoro timer with +25 XP bonus<br>• Cosmetic shop with 35+ items<br>• Goals tracker with progress bars</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">🎵</span><div class="card-title">Sound & Atmosphere</div></div>
+    <div class="card-desc">• Procedural lo-fi music engine (no audio files!)<br>• 5 ambient soundscapes: Rain, Ocean, Forest, Campfire, Café<br>• Adaptive audio — reacts to typing speed and mood<br>• Dynamic sky background that follows time of day<br>• 8 sky phases: Night → Dawn → Morning → Noon → Afternoon → Sunset → Dusk → Evening<br>• Animated stars, clouds, fireflies, sun/moon<br>• Weather integration (real rain/snow in scene)</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">📤</span><div class="card-title">Export & Sync</div></div>
+    <div class="card-desc">• Export as JSON, Markdown, CSV, or plain text<br>• Monthly zine — auto-generated magazine from your notes<br>• QR code sync — transfer data between devices<br>• Notion integration — sync notes to Notion database<br>• Share plant stats with friends<br>• Time capsules — sealed messages to your future self<br>• PIN lock for private notes</div>
+  </div>
+</div>
+
+<!-- Technical Specs -->
+<div class="section">
+  <div class="section-title"><span class="icon">⚙️</span> Technical Specs</div>
+  <div class="section-subtitle">Built with zero frameworks — pure vanilla HTML, CSS, and JavaScript. Runs entirely in your browser with no server required.</div>
+  
+  <div class="tech-list">
+    <span class="tech-pill highlight">Vanilla JS</span>
+    <span class="tech-pill highlight">CSS3</span>
+    <span class="tech-pill highlight">HTML5 Canvas</span>
+    <span class="tech-pill highlight">IndexedDB</span>
+    <span class="tech-pill">PWA</span>
+    <span class="tech-pill">Service Worker</span>
+    <span class="tech-pill">Web Audio API</span>
+    <span class="tech-pill">Geolocation API</span>
+    <span class="tech-pill">Notification API</span>
+    <span class="tech-pill">Speech Recognition</span>
+    <span class="tech-pill">MediaRecorder</span>
+    <span class="tech-pill">Leaflet.js</span>
+    <span class="tech-pill">Vite</span>
+    <span class="tech-pill">Terser</span>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header"><span class="card-icon">🏗️</span><div class="card-title">Architecture</div></div>
+    <div class="card-desc">
+      <strong style="color:var(--accent)">Modular file structure:</strong><br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">index.html</code> — 429 lines, clean HTML structure<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">style.css</code> — 615 lines, full responsive styling<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">app.js</code> — 1,115 lines, core application logic<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">db.js</code> — IndexedDB storage layer with localStorage fallback<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">perf.js</code> — Debounce, throttle, lazy loading, virtual scroll<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">lofi.js</code> — Procedural lo-fi music engine (Web Audio API)<br>
+      • <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">sounds.js</code> — Ambient soundscape generator<br><br>
+      <strong style="color:var(--accent)">Performance optimizations:</strong><br>
+      • Lazy-loaded CDN dependencies (only load when features are used)<br>
+      • Debounced input handlers (200ms)<br>
+      • Canvas rendering with requestAnimationFrame<br>
+      • Image compression for photo notes<br>
+      • Service worker with offline caching<br>
+      • Data migration system for seamless version upgrades
+    </div>
+  </div>
+</div>
+
+<!-- Version History -->
+<div class="section">
+  <div class="section-title"><span class="icon">📜</span> Version History</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-version">v5.1 — Optimization Overhaul</div>
+      <div class="tl-desc">Split into modular files, IndexedDB storage, lazy loading, Vite build system, service worker upgrade, debounced inputs, data migration system.</div>
+      <div class="tl-tags"><span class="tl-tag">Performance</span><span class="tl-tag">IndexedDB</span><span class="tl-tag">Vite</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">v5.0 — Intelligence & Advanced Features</div>
+      <div class="tl-desc">17 new features: Focus mode, affirmations, sentiment analysis, word cloud, smart tags, plant DNA, mind map, location notes, monthly zine, QR sync, adaptive soundscapes, note reminders, and more.</div>
+      <div class="tl-tags"><span class="tl-tag">AI</span><span class="tl-tag">Maps</span><span class="tl-tag">DNA</span><span class="tl-tag">Canvas</span><span class="tl-tag">QR</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">v4.0 — Social & Media</div>
+      <div class="tl-desc">Pet companions, plant personality, soundscapes, daily challenges, goals, photo/voice notes, PIN lock, share & export system.</div>
+      <div class="tl-tags"><span class="tl-tag">Pets</span><span class="tl-tag">Audio</span><span class="tl-tag">Camera</span><span class="tl-tag">Export</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">v3.0 — Gamification & Customization</div>
+      <div class="tl-desc">XP shop with 35+ cosmetics, weather integration, time capsules, heatmap, templates, categories, lo-fi music, streak freezes.</div>
+      <div class="tl-tags"><span class="tl-tag">Shop</span><span class="tl-tag">Weather</span><span class="tl-tag">Lo-fi</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">v2.0 — Major Feature Update</div>
+      <div class="tl-desc">Achievements, insights dashboard, mood tracking, 4 plant types, pomodoro timer, theme picker, search, tags, PWA support.</div>
+      <div class="tl-tags"><span class="tl-tag">PWA</span><span class="tl-tag">Themes</span><span class="tl-tag">Insights</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">v1.0 — The Beginning</div>
+      <div class="tl-desc">Core note-taking with virtual plant, AI chat, speech-to-text, Notion integration, day-by-day grouping. The seed was planted. 🌱</div>
+      <div class="tl-tags"><span class="tl-tag">Core</span><span class="tl-tag">Chat</span><span class="tl-tag">Notion</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Affirmation -->
+<div class="section">
+  <div class="card" style="text-align:center;border:1px solid rgba(0,230,167,.15)">
+    <div style="font-size:2rem;margin-bottom:8px">🌟</div>
+    <div style="font-size:.95rem;color:rgba(255,255,255,.6);font-style:italic;line-height:1.6">"Your mind is a garden, your thoughts are the seeds. You can grow flowers or you can grow weeds."</div>
+    <div style="font-size:.75rem;color:var(--accent);margin-top:8px;font-weight:700">Start growing yours today →</div>
+  </div>
+</div>
+
+<div class="footer">
+  Made with ❤️ by <a href="index.html">Kevin</a> · <a href="https://github.com/KevinB2212/growthink" target="_blank">GitHub</a> · GroWthink v5.1
+</div>
+
+</div>
+
+<script>
+// Stars
+const sl=document.getElementById('stars');
+for(let i=0;i<60;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.left=Math.random()*100+'%';
+  s.style.top=Math.random()*100+'%';
+  s.style.animationDelay=Math.random()*3+'s';
+  s.style.width=s.style.height=(1+Math.random()*2)+'px';
+  sl.appendChild(s);
+}
+</script>
+</body>
+</html>
