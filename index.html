@@ -568,6 +568,35 @@ body {
   padding: 12px 0 4px; font-weight: 700;
 }
 
+.day-section { margin-bottom: 4px; }
+.day-section.first .day-divider-label { color: var(--accent); }
+
+.day-divider {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0 6px;
+}
+
+.day-divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.day-divider-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.day-divider-count {
+  font-size: 0.68rem;
+  color: var(--muted);
+  background: var(--card2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .empty-state {
   text-align: center; padding: 40px 20px;
   color: var(--muted);
@@ -951,7 +980,7 @@ body {
         </div>
       </div>
     </div>
-    <div class="notes-list" id="today-notes"></div>
+    <div class="notes-list" id="main-notes"></div>
   </div>
 
   <!-- AI Chat tab -->
@@ -1230,24 +1259,50 @@ function renderQuote(){
   document.getElementById('quote').textContent = quotes[Math.floor(Math.random()*quotes.length)];
 }
 
-function renderTodayNotes(){
-  const today = new Date().toISOString().split('T')[0];
-  const list = state.notes.filter(n=>n.day===today);
-  const el = document.getElementById('today-notes');
+function renderMainNotes(){
+  const el = document.getElementById('main-notes');
 
-  if(!list.length){
-    el.innerHTML='<div class="empty-state"><div class="emoji">🌿</div><p>No notes yet today.<br>Write something to grow your plant!</p></div>';
+  if(!state.notes.length){
+    el.innerHTML='<div class="empty-state"><div class="emoji">🌿</div><p>No notes yet.<br>Write something to grow your plant!</p></div>';
     return;
   }
 
-  el.innerHTML = list.map(n=>`
-    <div class="note-card">
-      <div class="note-text">${esc(n.text)}</div>
-      <div class="note-meta">
-        <span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
-        <button class="delete-btn" onclick="deleteNote(${n.id})">✕</button>
-      </div>
-    </div>`).join('');
+  const grouped = {};
+  state.notes.forEach(n => {
+    if(!grouped[n.day]) grouped[n.day] = [];
+    grouped[n.day].push(n);
+  });
+
+  let html = '';
+  const days = Object.keys(grouped).sort().reverse();
+
+  days.forEach((day, idx) => {
+    const d = new Date(day + 'T12:00:00');
+    const label = isToday(d) ? '📅 Today' : isYesterday(d) ? '📅 Yesterday' : '📅 ' + d.toLocaleDateString([], {weekday:'long', month:'short', day:'numeric'});
+    const count = grouped[day].length;
+
+    html += `<div class="day-section${idx===0?' first':''}">`;
+    html += `<div class="day-divider">
+      <div class="day-divider-line"></div>
+      <span class="day-divider-label">${label}</span>
+      <span class="day-divider-count">${count} note${count!==1?'s':''}</span>
+      <div class="day-divider-line"></div>
+    </div>`;
+
+    grouped[day].forEach(n => {
+      html += `<div class="note-card">
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-meta">
+          <span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+          <button class="delete-btn" onclick="deleteNote(${n.id})">✕</button>
+        </div>
+      </div>`;
+    });
+
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
 }
 
 function renderAllNotes(){
@@ -1329,7 +1384,7 @@ function render(){
   renderHealth();
   renderXP();
   renderStats();
-  renderTodayNotes();
+  renderMainNotes();
 }
 
 // AI Chat
