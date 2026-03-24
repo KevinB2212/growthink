@@ -749,6 +749,75 @@ body {
 
 .chat-input-area input::placeholder { color: #3a3a5a; }
 
+/* Mic button */
+.mic-btn {
+  width: 42px; height: 42px;
+  border: none; border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--border);
+  color: var(--muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.mic-btn.recording {
+  background: rgba(255,71,87,0.15);
+  border-color: var(--danger);
+  color: var(--danger);
+  animation: micPulse 1.5s ease-in-out infinite;
+}
+
+.mic-btn.recording::after {
+  content: '';
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--danger);
+  animation: micRing 1.5s ease-out infinite;
+}
+
+@keyframes micPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes micRing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.recording-indicator {
+  display: none;
+  align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255,71,87,0.1);
+  border: 1px solid rgba(255,71,87,0.2);
+  border-radius: 12px;
+  font-size: 0.78rem;
+  color: var(--danger);
+  font-weight: 600;
+  margin-bottom: 6px;
+  animation: fadeIn 0.3s ease;
+}
+
+.recording-indicator.active { display: flex; }
+
+.rec-dot {
+  width: 8px; height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  animation: recBlink 1s ease-in-out infinite;
+}
+
+@keyframes recBlink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
 .typing-dots {
   display: inline-flex; gap: 4px; padding: 4px 0;
 }
@@ -866,13 +935,20 @@ body {
 
   <!-- Write tab -->
   <div class="tab-content active" id="tab-write">
+    <div class="recording-indicator" id="rec-write">
+      <div class="rec-dot"></div>
+      <span>Listening... speak now</span>
+    </div>
     <div class="input-area">
       <textarea id="note-input" placeholder="What's on your mind? ✨" rows="2"></textarea>
       <div class="input-footer">
         <span class="char-count" id="char-count">0</span>
-        <button class="send-btn" id="add-btn">
-          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        </button>
+        <div style="display:flex;gap:6px">
+          <button class="mic-btn" id="mic-write" title="Speech to text">🎙️</button>
+          <button class="send-btn" id="add-btn">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
       </div>
     </div>
     <div class="notes-list" id="today-notes"></div>
@@ -890,8 +966,13 @@ body {
         🎯 "Goals for this week: exercise, read, code"</div>
       </div>
     </div>
+    <div class="recording-indicator" id="rec-chat">
+      <div class="rec-dot"></div>
+      <span>Listening... speak now</span>
+    </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" placeholder="Tell me what to note down..." autocomplete="off">
+      <button class="mic-btn" id="mic-chat" title="Speech to text">🎙️</button>
       <button id="chat-send" class="send-btn">
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
@@ -1478,6 +1559,94 @@ function removeTypingBubble(id) {
 function scrollChat() {
   setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 50);
 }
+
+// Speech to Text
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let activeRecognition = null;
+
+function setupMic(btnId, targetId, indicatorId) {
+  const btn = document.getElementById(btnId);
+  if (!SpeechRecognition) {
+    btn.style.display = 'none';
+    return;
+  }
+
+  btn.addEventListener('click', () => {
+    // If already recording, stop
+    if (btn.classList.contains('recording')) {
+      if (activeRecognition) activeRecognition.stop();
+      return;
+    }
+
+    // Stop any other active recording
+    if (activeRecognition) {
+      activeRecognition.stop();
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    const target = document.getElementById(targetId);
+    const indicator = document.getElementById(indicatorId);
+    const isTextarea = target.tagName === 'TEXTAREA';
+    const existingText = isTextarea ? target.value : target.value;
+    let finalTranscript = existingText ? existingText + ' ' : '';
+
+    btn.classList.add('recording');
+    indicator.classList.add('active');
+    activeRecognition = recognition;
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interim = transcript;
+        }
+      }
+      if (isTextarea) {
+        target.value = finalTranscript + interim;
+        target.style.height = 'auto';
+        target.style.height = Math.min(target.scrollHeight, 120) + 'px';
+        charCount.textContent = target.value.length;
+      } else {
+        target.value = finalTranscript + interim;
+      }
+    };
+
+    recognition.onend = () => {
+      btn.classList.remove('recording');
+      indicator.classList.remove('active');
+      activeRecognition = null;
+      // Clean up the final value
+      if (isTextarea) {
+        target.value = finalTranscript.trim();
+        charCount.textContent = target.value.length;
+      } else {
+        target.value = finalTranscript.trim();
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.log('Speech error:', event.error);
+      btn.classList.remove('recording');
+      indicator.classList.remove('active');
+      activeRecognition = null;
+      if (event.error === 'not-allowed') {
+        alert('Microphone access denied. Please allow microphone in your browser settings.');
+      }
+    };
+
+    recognition.start();
+  });
+}
+
+setupMic('mic-write', 'note-input', 'rec-write');
+setupMic('mic-chat', 'chat-input', 'rec-chat');
 
 // Init
 initScene();
