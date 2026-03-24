@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0a0a1a">
 <link rel="manifest" href="manifest.json">
 <script src="lofi.js"></script>
+<script src="sounds.js"></script>
 <title>GroWthink 🌱</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
@@ -368,6 +369,73 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* Share card */
 .share-card-preview{padding:24px;border-radius:20px;text-align:center;margin:12px 0;background:linear-gradient(135deg,#111128,#1a1a3e);border:1px solid rgba(255,255,255,.1)}
+
+/* Pet */
+.pet-wrap{position:absolute;z-index:8;transition:all 1s ease;cursor:pointer}
+.pet-emoji{font-size:1.8rem;animation:petBounce 3s ease-in-out infinite}
+@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.pet-sleep .pet-emoji{animation:petSleep 4s ease-in-out infinite}
+@keyframes petSleep{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(2px) rotate(-5deg)}}
+.pet-msg{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--card);padding:4px 10px;border-radius:10px;font-size:.7rem;white-space:nowrap;animation:petMsg 3s ease forwards;pointer-events:none;border:1px solid rgba(255,255,255,.1)}
+@keyframes petMsg{0%{opacity:0;transform:translateX(-50%) translateY(5px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}85%{opacity:1}100%{opacity:0}}
+
+/* Challenges */
+.challenge-card{padding:12px 16px;border-radius:16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.challenge-icon{font-size:1.5rem}
+.challenge-info{flex:1}
+.challenge-name{font-size:.85rem;font-weight:700}
+.challenge-progress{font-size:.7rem;color:rgba(255,255,255,.4);margin-top:2px}
+.challenge-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden}
+.challenge-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .5s}
+.challenge-reward{font-size:.75rem;color:var(--accent);font-weight:700;white-space:nowrap}
+.challenge-done{opacity:.5}
+
+/* Goals */
+.goal-card{padding:14px;border-radius:16px;margin-bottom:8px}
+.goal-header{display:flex;justify-content:space-between;align-items:center}
+.goal-name{font-size:.9rem;font-weight:700}
+.goal-deadline{font-size:.65rem;color:rgba(255,255,255,.3)}
+.goal-bar{height:8px;background:rgba(255,255,255,.08);border-radius:4px;margin-top:8px;overflow:hidden}
+.goal-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .5s}
+.goal-actions{display:flex;gap:6px;margin-top:8px}
+.goal-btn{padding:4px 12px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:transparent;color:var(--text);font-family:'Nunito',sans-serif;font-size:.75rem;cursor:pointer}
+
+/* Soundscape */
+.sound-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.sound-btn{padding:12px 8px;border-radius:14px;border:2px solid transparent;text-align:center;cursor:pointer;transition:all .2s;background:transparent;color:var(--text);font-family:'Nunito',sans-serif}
+.sound-btn.active{border-color:var(--accent);background:var(--glow)}
+.sound-btn:active{transform:scale(.95)}
+.sound-emoji{font-size:1.5rem;display:block;margin-bottom:2px}
+.sound-name{font-size:.7rem;font-weight:600}
+
+/* PIN Lock */
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.pin-overlay.open{display:flex}
+.pin-dots{display:flex;gap:12px}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.3);transition:all .2s}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:240px}
+.pin-key{width:70px;height:55px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:var(--text);font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:700;cursor:pointer;transition:all .15s}
+.pin-key:active{background:var(--accent);color:#0a0a1a;transform:scale(.95)}
+
+/* Photo/Voice */
+.media-btns{display:flex;gap:4px}
+.media-btn{width:36px;height:36px;border:none;border-radius:50%;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.media-btn:active{background:var(--glow)}
+.note-media{margin-top:6px;padding-left:12px}
+.note-media img{max-width:100%;border-radius:10px;max-height:150px}
+.note-media audio{width:100%;height:32px;margin-top:4px}
+
+/* Plant speech */
+.plant-speech{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:8;background:var(--card);backdrop-filter:blur(10px);padding:6px 14px;border-radius:12px;font-size:.75rem;white-space:nowrap;animation:speechPop 4s ease forwards;pointer-events:none;border:1px solid rgba(255,255,255,.08);max-width:200px;text-align:center}
+@keyframes speechPop{0%{opacity:0;transform:translateX(-50%) translateY(10px)}10%{opacity:1;transform:translateX(-50%) translateY(0)}80%{opacity:1}100%{opacity:0}}
+
+/* Share */
+.share-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.share-btn{padding:14px;border-radius:16px;border:none;text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--text);transition:all .2s}
+.share-btn:active{transform:scale(.96)}
+.share-icon{font-size:1.5rem;display:block;margin-bottom:4px}
+.share-label{font-size:.78rem;font-weight:600}
 </style>
 </head>
 <body>
@@ -382,6 +450,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   <button class="top-btn" id="pomo-open" title="Pomodoro">⏱️</button>
 </div>
 <div class="top-btns">
+  <button class="top-btn" id="share-open" title="Share">📤</button>
   <button class="top-btn" id="badges-open" title="Achievements" style="position:relative">🏆<span class="badge-count" id="badge-count" style="display:none">0</span></button>
   <button class="top-btn" id="settings-open" title="Settings">⚙️</button>
 </div>
@@ -420,6 +489,29 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <div class="color-opt" data-pot="purple" style="background:linear-gradient(135deg,#8e44ad,#6c3483)"></div>
     </div>
   </div>
+  <div class="s-group"><div class="s-title">🌊 Ambient Sounds</div>
+    <div class="sound-grid" id="sound-grid">
+      <button class="sound-btn glass" data-sound="rain" onclick="toggleSound('rain')"><span class="sound-emoji">🌧️</span><span class="sound-name">Rain</span></button>
+      <button class="sound-btn glass" data-sound="ocean" onclick="toggleSound('ocean')"><span class="sound-emoji">🌊</span><span class="sound-name">Ocean</span></button>
+      <button class="sound-btn glass" data-sound="forest" onclick="toggleSound('forest')"><span class="sound-emoji">🌲</span><span class="sound-name">Forest</span></button>
+      <button class="sound-btn glass" data-sound="fire" onclick="toggleSound('fire')"><span class="sound-emoji">🔥</span><span class="sound-name">Campfire</span></button>
+      <button class="sound-btn glass" data-sound="cafe" onclick="toggleSound('cafe')"><span class="sound-emoji">☕</span><span class="sound-name">Café</span></button>
+      <button class="sound-btn glass" onclick="stopAllSounds()"><span class="sound-emoji">🔇</span><span class="sound-name">Off</span></button>
+    </div>
+  </div>
+  <div class="s-group"><div class="s-title">🐾 Plant Pet</div>
+    <div class="picker-row" id="pet-picker">
+      <button class="plant-opt" data-pet="" onclick="pickPet('')">None</button>
+      <button class="plant-opt" data-pet="🐱" onclick="pickPet('🐱')">🐱 Cat</button>
+      <button class="plant-opt" data-pet="🐦" onclick="pickPet('🐦')">🐦 Bird</button>
+      <button class="plant-opt" data-pet="🐸" onclick="pickPet('🐸')">🐸 Frog</button>
+      <button class="plant-opt" data-pet="🦋" onclick="pickPet('🦋')">🦋 Butterfly</button>
+      <button class="plant-opt" data-pet="🐿️" onclick="pickPet('🐿️')">🐿️ Squirrel</button>
+    </div>
+  </div>
+  <div class="s-group"><div class="s-title">🔒 Note Lock</div>
+    <div class="s-item glass"><div class="s-left"><span class="s-icon">🔐</span><div><div class="s-label">PIN Lock</div><div class="s-desc">Set a PIN to lock private notes</div></div></div><button class="s-btn primary" style="width:auto;padding:6px 14px;margin:0;font-size:.8rem" id="set-pin-btn" onclick="setupPIN()">Set PIN</button></div>
+  </div>
   <div class="s-group"><div class="s-title">Plant Name</div>
     <div class="s-item glass"><input type="text" id="plant-name" placeholder="Name your plant" style="flex:1;background:transparent;border:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:.9rem" autocomplete="off"></div>
   </div>
@@ -429,7 +521,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
   <div class="s-group"><div class="s-title">About</div>
     <div class="s-item glass" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700">🌱 GroWthink v3.1</div>
+      <div style="font-weight:700">🌱 GroWthink v4.0</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">A mindful note-taking app with a living plant.</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">Made with ❤️ by Kevin</div>
     </div>
@@ -465,6 +557,31 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   <button class="install-no" id="install-no">Later</button>
 </div></div>
 
+<!-- Share -->
+<div class="overlay" id="share-overlay"><div class="panel">
+  <div class="panel-header"><h2>📤 Share & Export</h2><button class="panel-close" onclick="closePanel('share-overlay')">✕</button></div>
+  <div class="share-grid">
+    <button class="share-btn glass" onclick="shareNative()"><span class="share-icon">📱</span><span class="share-label">Share</span></button>
+    <button class="share-btn glass" onclick="exportMD()"><span class="share-icon">📝</span><span class="share-label">Markdown</span></button>
+    <button class="share-btn glass" onclick="exportCSV()"><span class="share-icon">📊</span><span class="share-label">CSV</span></button>
+    <button class="share-btn glass" onclick="exportJSON()"><span class="share-icon">📦</span><span class="share-label">JSON</span></button>
+    <button class="share-btn glass" onclick="exportTXT()"><span class="share-icon">📄</span><span class="share-label">Text</span></button>
+    <button class="share-btn glass" onclick="sharePlant()"><span class="share-icon">🌱</span><span class="share-label">Share Plant</span></button>
+  </div>
+</div></div>
+
+<!-- PIN -->
+<div class="pin-overlay" id="pin-overlay">
+  <div style="font-size:1.2rem;font-weight:700;margin-bottom:8px" id="pin-title">Enter PIN</div>
+  <div class="pin-dots" id="pin-dots"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
+  <div class="pin-pad">
+    <button class="pin-key" onclick="pinKey(1)">1</button><button class="pin-key" onclick="pinKey(2)">2</button><button class="pin-key" onclick="pinKey(3)">3</button>
+    <button class="pin-key" onclick="pinKey(4)">4</button><button class="pin-key" onclick="pinKey(5)">5</button><button class="pin-key" onclick="pinKey(6)">6</button>
+    <button class="pin-key" onclick="pinKey(7)">7</button><button class="pin-key" onclick="pinKey(8)">8</button><button class="pin-key" onclick="pinKey(9)">9</button>
+    <button class="pin-key" onclick="pinClear()">✕</button><button class="pin-key" onclick="pinKey(0)">0</button><button class="pin-key" onclick="pinSubmit()">✓</button>
+  </div>
+</div>
+
 <div class="app">
   <div class="header">
     <div class="logo">🌱 <span class="logo-text">GroWthink</span></div>
@@ -484,6 +601,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <div class="plant-accessory" id="plant-acc" style="display:none"></div>
     </div>
     <div class="plant-effect" id="plant-effect"></div>
+    <div class="pet-wrap" id="pet-wrap" style="display:none" onclick="petTap()"><div class="pet-emoji" id="pet-emoji"></div></div>
+    <div id="plant-speech"></div>
   </div>
 
   <div class="bar-section glass">
@@ -509,8 +628,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <button class="tab" data-tab="chat">🤖</button>
     <button class="tab" data-tab="insights">📊</button>
     <button class="tab" data-tab="history">📚</button>
+    <button class="tab" data-tab="goals">🎯</button>
     <button class="tab" data-tab="shop">🏪</button>
-    <button class="tab" data-tab="notion">📓</button>
   </div>
 
   <!-- Write -->
@@ -541,7 +660,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <textarea id="note-input" placeholder="What's growing in your mind? ✨" rows="3"></textarea>
       <div class="input-footer">
         <span class="char-count" id="char-count">0</span>
-        <div class="btn-row"><button class="mic-btn" id="mic-w">🎙️</button><button class="send-btn" id="add-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
+        <div class="btn-row">
+          <button class="media-btn" id="photo-btn" onclick="takePhoto()" title="Photo">📷</button>
+          <button class="media-btn" id="voice-btn" onclick="toggleVoiceNote()" title="Voice Note">🎤</button>
+          <button class="mic-btn" id="mic-w">🎙️</button>
+          <button class="send-btn" id="add-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+        </div>
       </div>
     </div>
     <div class="notes-list" id="main-notes"></div>
@@ -574,6 +698,18 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="search-bar"><input type="text" id="search-input" placeholder="🔍 Search notes..." autocomplete="off"></div>
     <div class="filter-tags" id="filter-tags"></div>
     <div class="notes-list" id="all-notes"></div>
+  </div>
+
+  <!-- Goals & Challenges -->
+  <div class="tab-content" id="tab-goals">
+    <div style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:8px">🏋️ DAILY CHALLENGES</div>
+    <div id="challenges-list"></div>
+    <div style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,.5);margin:12px 0 8px">🎯 MY GOALS</div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input type="text" id="goal-input" placeholder="Add a goal..." style="flex:1;background:var(--card);border:2px solid rgba(255,255,255,.06);border-radius:12px;color:var(--text);padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.9rem">
+      <button class="send-btn" style="width:38px;height:38px" onclick="addGoal()">+</button>
+    </div>
+    <div id="goals-list"></div>
   </div>
 
   <!-- Shop -->
@@ -616,7 +752,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
   </div>
 
-  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v3.1</a></div></div>
+  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v4.0</a></div></div>
 </div>
 
 <script>
@@ -730,7 +866,7 @@ function initMoods(){document.getElementById('mood-bar').innerHTML=MOODS.map(m=>
 function pickMood(m){C.mood=C.mood===m?'':m;saveC();document.querySelectorAll('.mood-btn').forEach(b=>b.classList.toggle('selected',b.dataset.mood===C.mood));}
 
 // ===== TABS =====
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();if(t.dataset.tab==='shop')renderShop();if(t.dataset.tab==='history')renderHistory();}));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();if(t.dataset.tab==='shop')renderShop();if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='goals'){renderChallenges();renderGoals();}}));
 
 // ===== INPUT =====
 const NI=document.getElementById('note-input'),CC=document.getElementById('char-count');
@@ -1147,6 +1283,218 @@ document.getElementById('plant-name').addEventListener('input',e=>{C.name=e.targ
 document.getElementById('export-data').addEventListener('click',()=>{const d=JSON.stringify(S,null,2);const b=new Blob([d],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='growthink.json';a.click();});
 document.getElementById('reset-data').addEventListener('click',()=>{if(confirm('Reset everything?')){localStorage.clear();location.reload();}});
 
+// ===== PET SYSTEM =====
+function pickPet(emoji){C.pet=emoji;saveC();renderPet();document.querySelectorAll('#pet-picker .plant-opt').forEach(b=>b.classList.toggle('active',b.dataset.pet===C.pet));}
+function renderPet(){
+  const wrap=document.getElementById('pet-wrap'),em=document.getElementById('pet-emoji');
+  if(!C.pet){wrap.style.display='none';return;}
+  wrap.style.display='block';em.textContent=C.pet;
+  const h=new Date().getHours();const sleeping=h>=23||h<6;
+  wrap.className='pet-wrap'+(sleeping?' pet-sleep':'');
+  wrap.style.bottom='35px';wrap.style.right='15px';
+}
+const PET_MSGS=['🌱 Looking good!','Water me!','Nice note!','🎵 Vibing...','Grow grow grow!','You\'re on fire!','Keep it up!','✨ Magical!','Sleepy...','Let\'s go!'];
+function petTap(){
+  const wrap=document.getElementById('pet-wrap');
+  const msg=document.createElement('div');msg.className='pet-msg';
+  msg.textContent=PET_MSGS[Math.floor(Math.random()*PET_MSGS.length)];
+  wrap.appendChild(msg);setTimeout(()=>msg.remove(),3000);
+}
+function petReact(text){
+  if(!C.pet)return;
+  const wrap=document.getElementById('pet-wrap');
+  const em=document.getElementById('pet-emoji');
+  em.style.transform='scale(1.3)';setTimeout(()=>em.style.transform='',500);
+}
+
+// ===== PLANT PERSONALITY =====
+function plantSpeak(msg){
+  const el=document.getElementById('plant-speech');
+  const div=document.createElement('div');div.className='plant-speech';div.textContent=msg;
+  el.appendChild(div);setTimeout(()=>div.remove(),4500);
+}
+function plantReact(){
+  const h=S.health;const lvl=S.level;
+  const msgs=[];
+  if(h<20)msgs.push('I\'m so thirsty... 🥀','Please write something...','Help me...');
+  else if(h<50)msgs.push('Could use some notes...','Feeling a bit dry','Write to water me!');
+  else msgs.push('Feeling great! 🌱','Keep the notes coming!','I\'m thriving!','Thank you! ✨');
+  if(lvl>=5)msgs.push('I\'m getting so tall!','Look at my flowers!');
+  if(S.streak>=7)msgs.push('Amazing streak! 🔥','Unstoppable!');
+  // Random chance to speak
+  if(Math.random()>0.7)plantSpeak(msgs[Math.floor(Math.random()*msgs.length)]);
+}
+
+// ===== DAILY CHALLENGES =====
+const CHALLENGE_DEFS=[
+  {id:'write3',name:'Triple Threat',desc:'Write 3 notes today',icon:'✍️',target:3,reward:30,check:s=>{const t=new Date().toISOString().split('T')[0];return s.notes.filter(n=>n.day===t).length;}},
+  {id:'write5',name:'Fab Five',desc:'Write 5 notes today',icon:'🖐️',target:5,reward:50,check:s=>{const t=new Date().toISOString().split('T')[0];return s.notes.filter(n=>n.day===t).length;}},
+  {id:'write10',name:'Note Machine',desc:'Write 10 notes today',icon:'🤖',target:10,reward:100,check:s=>{const t=new Date().toISOString().split('T')[0];return s.notes.filter(n=>n.day===t).length;}},
+  {id:'long',name:'Deep Thinker',desc:'Write a note over 100 characters',icon:'🧠',target:1,reward:25,check:s=>{const t=new Date().toISOString().split('T')[0];return s.notes.filter(n=>n.day===t&&n.text.length>100).length;}},
+  {id:'mood3',name:'Mood Ring',desc:'Use 3 different moods today',icon:'🎭',target:3,reward:40,check:s=>{const t=new Date().toISOString().split('T')[0];return new Set(s.notes.filter(n=>n.day===t&&n.mood).map(n=>n.mood)).size;}},
+];
+function renderChallenges(){
+  const today=new Date().toISOString().split('T')[0];
+  if(!S.challengesDone)S.challengesDone={};
+  document.getElementById('challenges-list').innerHTML=CHALLENGE_DEFS.map(c=>{
+    const prog=c.check(S);const done=S.challengesDone[today+'_'+c.id];const pct=Math.min(prog/c.target*100,100);
+    return `<div class="challenge-card glass${done?' challenge-done':''}"><div class="challenge-icon">${c.icon}</div><div class="challenge-info"><div class="challenge-name">${c.name}</div><div class="challenge-progress">${c.desc} (${Math.min(prog,c.target)}/${c.target})</div><div class="challenge-bar"><div class="challenge-fill" style="width:${pct}%"></div></div></div><div class="challenge-reward">${done?'✅':'⭐'+c.reward}</div></div>`;
+  }).join('');
+}
+function checkChallenges(){
+  const today=new Date().toISOString().split('T')[0];
+  if(!S.challengesDone)S.challengesDone={};
+  CHALLENGE_DEFS.forEach(c=>{
+    const key=today+'_'+c.id;
+    if(!S.challengesDone[key]&&c.check(S)>=c.target){
+      S.challengesDone[key]=true;S.xp+=c.reward;save();
+      plantSpeak('Challenge done! +'+c.reward+' XP! 🎉');
+    }
+  });
+}
+
+// ===== GOALS =====
+function addGoal(){
+  const input=document.getElementById('goal-input');const text=input.value.trim();if(!text)return;
+  if(!S.goals)S.goals=[];
+  S.goals.push({id:Date.now(),text,progress:0,target:100,created:new Date().toISOString()});
+  save();input.value='';renderGoals();
+}
+function updateGoalProgress(id,delta){
+  const g=S.goals?.find(g=>g.id===id);if(!g)return;
+  g.progress=Math.min(g.target,Math.max(0,g.progress+delta));
+  if(g.progress>=g.target){S.xp+=50;plantSpeak('Goal complete! +50 XP! 🎯');}
+  save();renderGoals();renderXP();
+}
+function deleteGoal(id){S.goals=S.goals?.filter(g=>g.id!==id);save();renderGoals();}
+function renderGoals(){
+  if(!S.goals)S.goals=[];
+  document.getElementById('goals-list').innerHTML=S.goals.map(g=>{
+    const pct=(g.progress/g.target)*100;const done=g.progress>=g.target;
+    return `<div class="goal-card glass${done?' challenge-done':''}"><div class="goal-header"><div class="goal-name">${done?'✅ ':''}${esc(g.text)}</div></div><div class="goal-bar"><div class="goal-fill" style="width:${pct}%"></div></div><div class="goal-actions"><button class="goal-btn" onclick="updateGoalProgress(${g.id},-10)">-10</button><button class="goal-btn" onclick="updateGoalProgress(${g.id},10)">+10</button><button class="goal-btn" onclick="updateGoalProgress(${g.id},25)">+25</button><button class="goal-btn" style="color:var(--danger)" onclick="deleteGoal(${g.id})">✕</button></div></div>`;
+  }).join('')||'<div class="empty-state"><div class="emoji">🎯</div><p>Set a goal to work towards!</p></div>';
+}
+
+// ===== SOUNDSCAPES =====
+let activeSounds={};
+function toggleSound(name){
+  if(activeSounds[name]){window.soundscape.stop(name);delete activeSounds[name];}
+  else{const methods={rain:'startRain',ocean:'startOcean',forest:'startForest',fire:'startCampfire',cafe:'startCafe'};window.soundscape[methods[name]]?.();activeSounds[name]=true;}
+  document.querySelectorAll('#sound-grid .sound-btn').forEach(b=>b.classList.toggle('active',!!activeSounds[b.dataset.sound]));
+}
+function stopAllSounds(){Object.keys(activeSounds).forEach(k=>{window.soundscape.stop(k);delete activeSounds[k];});document.querySelectorAll('#sound-grid .sound-btn').forEach(b=>b.classList.remove('active'));}
+
+// ===== SHARE & EXPORT =====
+document.getElementById('share-open').addEventListener('click',()=>openPanel('share-overlay'));
+function shareNative(){
+  if(!navigator.share){alert('Share not supported on this browser');return;}
+  const today=new Date().toISOString().split('T')[0];
+  const todayNotes=S.notes.filter(n=>n.day===today);
+  const text='🌱 GroWthink - '+today+'\n\n'+todayNotes.map(n=>'• '+n.text).join('\n')+'\n\n🌿 Level '+S.level+' | 🔥 '+S.streak+' day streak';
+  navigator.share({title:'GroWthink Notes',text}).catch(()=>{});
+}
+function exportMD(){
+  const grouped={};S.notes.forEach(n=>{if(!grouped[n.day])grouped[n.day]=[];grouped[n.day].push(n);});
+  let md='# 🌱 GroWthink Notes\n\n';
+  Object.keys(grouped).sort().reverse().forEach(day=>{
+    md+=`## ${day}\n\n`;grouped[day].forEach(n=>{md+=`- ${n.mood||''} ${n.text}\n`;});md+='\n';
+  });
+  dl(md,'growthink.md','text/markdown');
+}
+function exportCSV(){
+  let csv='Date,Time,Mood,Category,Text\n';
+  S.notes.forEach(n=>{csv+=`"${n.day}","${new Date(n.date).toLocaleTimeString()}","${n.mood||''}","${n.cat||''}","${n.text.replace(/"/g,'""')}"\n`;});
+  dl(csv,'growthink.csv','text/csv');
+}
+function exportJSON(){dl(JSON.stringify(S,null,2),'growthink.json','application/json');}
+function exportTXT(){
+  let txt='GroWthink Notes\n================\n\n';
+  S.notes.forEach(n=>{txt+=`[${n.day} ${new Date(n.date).toLocaleTimeString()}] ${n.mood||''} ${n.text}\n\n`;});
+  dl(txt,'growthink.txt','text/plain');
+}
+function dl(content,name,type){const b=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+function sharePlant(){
+  const text=`🌱 My GroWthink Plant\n\n🌿 Level ${S.level} | ${C.plant==='cactus'?'🌵':C.plant==='bonsai'?'🌳':C.plant==='vine'?'🌿':'🌸'}\n💚 Health: ${Math.round(S.health)}%\n📝 ${S.notes.length} notes\n🔥 ${S.streak} day streak\n🏆 ${S.badges?.length||0} badges\n\nGrow yours at: kevinb2212.github.io/growthink`;
+  if(navigator.share)navigator.share({title:'My GroWthink Plant',text}).catch(()=>{});
+  else{navigator.clipboard?.writeText(text);alert('Copied to clipboard!');}
+}
+
+// ===== PHOTO NOTES =====
+let pendingPhoto=null;
+function takePhoto(){
+  const input=document.createElement('input');input.type='file';input.accept='image/*';input.capture='environment';
+  input.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{pendingPhoto=ev.target.result;NI.placeholder='📷 Photo attached! Add a caption...';NI.focus();};reader.readAsDataURL(file);};
+  input.click();
+}
+
+// ===== VOICE NOTES =====
+let voiceRecorder=null,voiceChunks=[];
+function toggleVoiceNote(){
+  const btn=document.getElementById('voice-btn');
+  if(voiceRecorder&&voiceRecorder.state==='recording'){
+    voiceRecorder.stop();btn.textContent='🎤';btn.style.background='';return;
+  }
+  navigator.mediaDevices?.getUserMedia({audio:true}).then(stream=>{
+    voiceRecorder=new MediaRecorder(stream);voiceChunks=[];
+    voiceRecorder.ondataavailable=e=>voiceChunks.push(e.data);
+    voiceRecorder.onstop=()=>{
+      const blob=new Blob(voiceChunks,{type:'audio/webm'});
+      const reader=new FileReader();reader.onload=e=>{
+        pendingVoice=e.target.result;NI.placeholder='🎤 Voice note recorded! Add text...';NI.focus();
+      };reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    voiceRecorder.start();btn.textContent='⏹️';btn.style.background='rgba(255,71,87,.15)';
+  }).catch(()=>alert('Microphone access denied'));
+}
+let pendingVoice=null;
+
+// ===== PIN LOCK =====
+let pinBuffer='',pinMode='',pinCallback=null;
+function setupPIN(){pinMode='set';pinBuffer='';document.getElementById('pin-title').textContent='Set a 4-digit PIN';document.getElementById('pin-overlay').classList.add('open');updatePinDots();}
+function pinKey(n){if(pinBuffer.length>=4)return;pinBuffer+=n;updatePinDots();}
+function pinClear(){pinBuffer='';updatePinDots();}
+function pinSubmit(){
+  if(pinBuffer.length!==4)return;
+  if(pinMode==='set'){C.pin=pinBuffer;saveC();document.getElementById('pin-overlay').classList.remove('open');alert('PIN set! ✅');pinBuffer='';pinMode='';}
+  else if(pinMode==='unlock'){
+    if(pinBuffer===C.pin){document.getElementById('pin-overlay').classList.remove('open');pinBuffer='';pinMode='';if(pinCallback)pinCallback();}
+    else{pinBuffer='';updatePinDots();document.getElementById('pin-title').textContent='Wrong PIN! Try again';}
+  }
+}
+function updatePinDots(){document.querySelectorAll('#pin-dots .pin-dot').forEach((d,i)=>d.classList.toggle('filled',i<pinBuffer.length));}
+
+// ===== UPDATE ADDNOTE WITH MEDIA =====
+const origAddNote2=addNote;
+addNote=function(){
+  const text=NI.value.trim();if(!text&&!pendingPhoto&&!pendingVoice)return;
+  const now=new Date(),today=now.toISOString().split('T')[0];
+  if(S.lastNote){const ld=new Date(S.lastNote).toISOString().split('T')[0],y=new Date(now);y.setDate(y.getDate()-1);if(ld!==today){S.streak=ld===y.toISOString().split('T')[0]?S.streak+1:1;}}else S.streak=1;
+  S.best=Math.max(S.best,S.streak);S.lastNote=now.toISOString();
+  const tags=(text.match(/#\w+/g)||[]).map(t=>t.toLowerCase());
+  const note={id:Date.now(),text:text||'📷 Photo note',date:now.toISOString(),day:today,mood:C.mood||'',tags,pinned:false,cat:C.cat||''};
+  if(pendingPhoto){note.photo=pendingPhoto;pendingPhoto=null;NI.placeholder='What\'s growing in your mind? ✨';}
+  if(pendingVoice){note.voice=pendingVoice;pendingVoice=null;NI.placeholder='What\'s growing in your mind? ✨';}
+  S.notes.unshift(note);
+  S.health=Math.min(100,S.health+10);S.xp+=10+Math.floor((text||'').length/15);
+  if(S.xp>=S.level*50){S.xp-=S.level*50;S.level++;showLevelUp();}
+  checkBadges();checkChallenges();save();NI.value='';NI.style.height='auto';CC.textContent='0';C.mood='';C.cat='';saveC();
+  document.querySelectorAll('.mood-btn,.cat-btn').forEach(b=>b.classList.remove('active','selected'));
+  if(C.particles){spawnDrops();spawnSparkles();}
+  petReact();plantReact();render();renderChallenges();
+  if(nC.autoSync&&nC.connected)syncNote(S.notes[0]);
+};
+
+// ===== UPDATE NOTE HTML WITH MEDIA =====
+const origNoteHTML=noteHTML;
+noteHTML=function(n){
+  const base=origNoteHTML(n);
+  let media='';
+  if(n.photo)media+=`<div class="note-media"><img src="${n.photo}" loading="lazy"></div>`;
+  if(n.voice)media+=`<div class="note-media"><audio controls src="${n.voice}"></audio></div>`;
+  return base.replace('</div></div></div>',media+'</div></div></div>');
+};
+
 // ===== UTILS =====
 function isToday(d){return d.toDateString()===new Date().toDateString()}
 function isYday(d){const y=new Date();y.setDate(y.getDate()-1);return d.toDateString()===y.toDateString()}
@@ -1165,9 +1513,13 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(
 (function(){const old=localStorage.getItem('growthink');if(old&&!localStorage.getItem('gt_state')){const o=JSON.parse(old);S.notes=o.notes||[];S.health=o.health||100;S.level=o.level||1;S.xp=o.xp||0;S.streak=o.streak||0;S.best=o.bestStreak||o.streak||0;S.lastNote=o.lastNoteDate;S.notes.forEach(n=>{if(!n.tags)n.tags=[];if(!n.mood)n.mood='';if(n.pinned===undefined)n.pinned=false;});save();}})();
 
 // ===== INIT =====
-initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();checkFreeze();applySeasonal();applyCosmetics();render();
-// Try weather
+initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();checkFreeze();applySeasonal();applyCosmetics();renderPet();renderChallenges();renderGoals();render();
+// Weather, plant personality
 setTimeout(fetchWeather,2000);
+setTimeout(plantReact,5000);
+setInterval(plantReact,120000);
+// Pet picker init
+document.querySelectorAll('#pet-picker .plant-opt').forEach(b=>b.classList.toggle('active',b.dataset.pet===(C.pet||'')));
 setInterval(()=>{witherCheck();renderH();renderPlant();updateSky();},60000);
 setInterval(renderQuote,300000);
 </script>
