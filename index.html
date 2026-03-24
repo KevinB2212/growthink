@@ -143,10 +143,15 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 .day-section{margin-bottom:4px}
 .day-section.first .day-divider-label{color:var(--accent)}
-.day-divider{display:flex;align-items:center;gap:10px;padding:10px 0 6px}
+.day-divider{display:flex;align-items:center;gap:10px;padding:10px 0 6px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.day-divider:active{opacity:.7}
 .day-divider-line{flex:1;height:1px;background:rgba(255,255,255,.06)}
 .day-divider-label{font-size:.78rem;font-weight:700;white-space:nowrap}
 .day-divider-count{font-size:.65rem;color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);padding:2px 8px;border-radius:10px}
+.day-divider-arrow{font-size:.7rem;color:rgba(255,255,255,.3);transition:transform .3s ease}
+.day-section.collapsed .day-divider-arrow{transform:rotate(-90deg)}
+.day-notes{overflow:hidden;transition:max-height .4s ease,opacity .3s ease}
+.day-section.collapsed .day-notes{max-height:0!important;opacity:0;padding:0}
 .empty-state{text-align:center;padding:40px 20px;color:rgba(255,255,255,.3)}
 .empty-state .emoji{font-size:3rem;margin-bottom:8px}
 
@@ -514,7 +519,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
   <div class="s-group"><div class="s-title">About</div>
     <div class="s-item glass" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700">🌱 GroWthink v4.0</div>
+      <div style="font-weight:700">🌱 GroWthink v4.1</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">A mindful note-taking app with a living plant.</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">Made with ❤️ by Kevin</div>
     </div>
@@ -746,7 +751,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
   </div>
 
-  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v4.0</a></div></div>
+  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v4.1</a></div></div>
 </div>
 
 <script>
@@ -923,9 +928,10 @@ function renderHistory(){
   const grouped={};notes.forEach(n=>{if(!grouped[n.day])grouped[n.day]=[];grouped[n.day].push(n);});
   let html='';Object.keys(grouped).sort().reverse().forEach(day=>{
     const d=new Date(day+'T12:00:00'),label=isToday(d)?'Today':isYday(d)?'Yesterday':d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
-    html+=`<div class="day-divider"><div class="day-divider-line"></div><span class="day-divider-label">${label}</span><span class="day-divider-count">${grouped[day].length}</span><div class="day-divider-line"></div></div>${grouped[day].map(noteHTML).join('')}`;
+    html+=`<div class="day-section collapsed" id="hist-${day}"><div class="day-divider" onclick="toggleHistDay('${day}')"><span class="day-divider-arrow">▼</span><div class="day-divider-line"></div><span class="day-divider-label">${label}</span><span class="day-divider-count">${grouped[day].length}</span><div class="day-divider-line"></div></div><div class="day-notes">${grouped[day].map(noteHTML).join('')}</div></div>`;
   });el.innerHTML=html;
 }
+function toggleHistDay(day){const sec=document.getElementById('hist-'+day);if(!sec)return;sec.classList.toggle('collapsed');if(!sec.classList.contains('collapsed')){const notesDiv=sec.querySelector('.day-notes');notesDiv.style.maxHeight=notesDiv.scrollHeight+'px';}}
 
 // ===== INSIGHTS =====
 function renderInsights(){
