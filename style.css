@@ -283,8 +283,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 .tab-content{display:none;flex-direction:column;flex:1}.tab-content.active{display:flex}
 .footer{text-align:center;padding:20px 0 10px;margin-top:auto}
-.footer-text{font-size:.7rem;color:var(--accent);opacity:.5;letter-spacing:.5px}
-.footer-text a{color:var(--accent);opacity:.7;text-decoration:none}
+.footer-text{font-size:.7rem;color:var(--accent);opacity:1;letter-spacing:.5px;font-weight:700}
+.footer-text a{color:var(--accent2);font-weight:800;text-decoration:none}
 .notes-list::-webkit-scrollbar{width:3px}.notes-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:2px}
 
 /* Writing prompt */
