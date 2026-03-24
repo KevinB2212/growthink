@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a1a">
 <link rel="manifest" href="manifest.json">
+<script src="lofi.js"></script>
 <title>GroWthink 🌱</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
@@ -297,6 +298,76 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .prompt-card{padding:12px 16px;margin-bottom:8px;border-radius:14px;font-size:.85rem;text-align:center;cursor:pointer;transition:all .2s;border:1px solid rgba(0,230,167,.1)}
 .prompt-card:active{transform:scale(.98)}
 .prompt-label{font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px}
+
+/* Calendar Heatmap */
+.heatmap-card{padding:16px;margin-bottom:10px;border-radius:20px}
+.heatmap-grid{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.hm-cell{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.04)}
+.hm-cell.l1{background:rgba(0,230,167,.2)}.hm-cell.l2{background:rgba(0,230,167,.4)}.hm-cell.l3{background:rgba(0,230,167,.6)}.hm-cell.l4{background:rgba(0,230,167,.9)}
+.hm-months{display:flex;justify-content:space-between;font-size:.55rem;color:rgba(255,255,255,.25);margin-top:4px;padding:0 2px}
+
+/* Categories */
+.cat-row{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap}
+.cat-btn{font-size:.75rem;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;cursor:pointer;font-weight:600;transition:all .2s}
+.cat-btn.active{color:#0a0a1a}
+.cat-work.active{background:#3b82f6;border-color:#3b82f6}.cat-personal.active{background:#a855f7;border-color:#a855f7}.cat-ideas.active{background:#f97316;border-color:#f97316}.cat-journal.active{background:#ec4899;border-color:#ec4899}
+.note-cat{font-size:.6rem;padding:1px 6px;border-radius:6px;font-weight:700;margin-right:4px}
+
+/* Habit Tracker */
+.habits-card{padding:14px 16px;margin-bottom:8px;border-radius:16px}
+.habit-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+.habit-check{width:24px;height:24px;border-radius:8px;border:2px solid rgba(255,255,255,.15);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s}
+.habit-check.done{border-color:var(--accent);background:var(--glow)}
+.habit-name{font-size:.85rem;flex:1}.habit-streak{font-size:.7rem;color:rgba(255,255,255,.3)}
+
+/* Shop */
+.shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.shop-item{padding:14px;border-radius:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.shop-item:active{transform:scale(.96)}
+.shop-item.owned{border-color:var(--accent)!important}
+.shop-item.equipped{box-shadow:0 0 0 2px var(--accent)}
+.shop-emoji{font-size:2rem;margin-bottom:4px}
+.shop-name{font-size:.78rem;font-weight:700}
+.shop-cost{font-size:.7rem;color:var(--accent);font-weight:600;margin-top:2px}
+.shop-owned-badge{position:absolute;top:6px;right:6px;font-size:.6rem;background:var(--accent);color:#0a0a1a;padding:1px 6px;border-radius:6px;font-weight:700}
+.shop-cat-title{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.5);margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.xp-bank{text-align:center;padding:10px;margin-bottom:12px;border-radius:14px;font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Time Capsule */
+.capsule-card{padding:14px;border-radius:16px;border:1px dashed rgba(255,255,255,.15);text-align:center;margin-bottom:8px;cursor:pointer}
+.capsule-locked{opacity:.6;filter:blur(2px);pointer-events:none;user-select:none}
+.capsule-date{font-size:.7rem;color:var(--accent);font-weight:700}
+.capsule-unlock{animation:popB .5s ease}
+
+/* Templates */
+.template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}
+.template-btn{padding:10px;border-radius:14px;border:none;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;text-align:left;color:var(--text);transition:all .2s}
+.template-btn:active{transform:scale(.96)}
+.template-icon{font-size:1.2rem;display:block;margin-bottom:2px}
+
+/* Streak Freeze */
+.freeze-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,201,255,.1);border:1px solid rgba(0,201,255,.2);padding:3px 10px;border-radius:12px;font-size:.7rem;color:var(--accent2);font-weight:700;margin-left:6px}
+
+/* Weather in scene */
+.weather-overlay{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.rain-drop{position:absolute;width:1px;background:linear-gradient(180deg,transparent,rgba(150,200,255,.4));animation:rainFall linear infinite}
+@keyframes rainFall{from{transform:translateY(-20px)}to{transform:translateY(280px)}}
+.snow-flake{position:absolute;background:rgba(255,255,255,.8);border-radius:50%;animation:snowFall linear infinite}
+@keyframes snowFall{from{transform:translateY(-10px) rotate(0deg)}to{transform:translateY(280px) rotate(360deg)}}
+
+/* Seasonal */
+.seasonal-deco{position:absolute;pointer-events:none;z-index:6;font-size:1.2rem;animation:seasonFloat 6s ease-in-out infinite}
+@keyframes seasonFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-10px) rotate(10deg)}}
+
+/* Plant cosmetics */
+.plant-hat{position:absolute;z-index:7;font-size:1.5rem;transition:all .5s}
+.plant-accessory{position:absolute;z-index:6;transition:all .5s}
+.plant-effect{position:absolute;z-index:3;pointer-events:none}
+.glow-effect{border-radius:50%;animation:glowPulse 3s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.6;transform:scale(1.1)}}
+
+/* Share card */
+.share-card-preview{padding:24px;border-radius:20px;text-align:center;margin:12px 0;background:linear-gradient(135deg,#111128,#1a1a3e);border:1px solid rgba(255,255,255,.1)}
 </style>
 </head>
 <body>
@@ -307,6 +378,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 <div class="celestial moon-obj" id="moon-obj" style="display:none"></div>
 
 <div class="top-btns">
+  <button class="top-btn" id="capsule-open" title="Time Capsules">⏰</button>
   <button class="top-btn" id="pomo-open" title="Pomodoro">⏱️</button>
   <button class="top-btn" id="badges-open" title="Achievements" style="position:relative">🏆<span class="badge-count" id="badge-count" style="display:none">0</span></button>
   <button class="top-btn" id="settings-open" title="Settings">⚙️</button>
@@ -355,7 +427,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
   <div class="s-group"><div class="s-title">About</div>
     <div class="s-item glass" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700">🌱 GroWthink v2.0</div>
+      <div style="font-weight:700">🌱 GroWthink v3.0</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">A mindful note-taking app with a living plant.</div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.3)">Made with ❤️ by Kevin</div>
     </div>
@@ -396,13 +468,20 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="logo">🌱 <span class="logo-text">GroWthink</span></div>
     <div class="subtitle" id="subtitle">Grow your mind, grow your plant</div>
     <div class="streak-badge" id="streak-badge" style="display:none"><span>🔥</span><span id="streak-text"></span></div>
+    <span class="freeze-badge" id="freeze-badge" style="display:none">🧊 <span id="freeze-count">0</span> freezes</span>
   </div>
 
   <div class="scene" id="scene">
     <div class="scene-ground" id="scene-ground"></div>
     <div class="grass" id="grass"></div>
     <div class="pot-wrap"><div class="pot-body" id="pot-body"><div class="pot-rim" id="pot-rim"></div><div class="pot-soil"></div><div class="pot-shine"></div></div></div>
-    <div class="plant-svg-wrap" id="plant"></div>
+    <div class="weather-overlay" id="weather-overlay"></div>
+    <div id="seasonal-decos"></div>
+    <div class="plant-svg-wrap" id="plant">
+      <div class="plant-hat" id="plant-hat" style="display:none"></div>
+      <div class="plant-accessory" id="plant-acc" style="display:none"></div>
+    </div>
+    <div class="plant-effect" id="plant-effect"></div>
   </div>
 
   <div class="bar-section glass">
@@ -424,15 +503,38 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   <div class="quote-card glass" id="quote"></div>
 
   <div class="tab-bar glass">
-    <button class="tab active" data-tab="write">✏️ Write</button>
-    <button class="tab" data-tab="chat">🤖 AI</button>
-    <button class="tab" data-tab="insights">📊 Stats</button>
-    <button class="tab" data-tab="history">📚 History</button>
-    <button class="tab" data-tab="notion">📓 Notion</button>
+    <button class="tab active" data-tab="write">✏️</button>
+    <button class="tab" data-tab="chat">🤖</button>
+    <button class="tab" data-tab="insights">📊</button>
+    <button class="tab" data-tab="history">📚</button>
+    <button class="tab" data-tab="shop">🏪</button>
+    <button class="tab" data-tab="notion">📓</button>
   </div>
 
   <!-- Write -->
   <div class="tab-content active" id="tab-write">
+    <!-- Templates -->
+    <div class="template-grid" id="template-grid">
+      <button class="template-btn glass" onclick="useTemplate('grateful')"><span class="template-icon">🙏</span>Gratitude</button>
+      <button class="template-btn glass" onclick="useTemplate('meeting')"><span class="template-icon">📋</span>Meeting</button>
+      <button class="template-btn glass" onclick="useTemplate('reflect')"><span class="template-icon">🌙</span>Reflection</button>
+      <button class="template-btn glass" onclick="useTemplate('braindump')"><span class="template-icon">🧠</span>Brain Dump</button>
+    </div>
+
+    <!-- Categories -->
+    <div class="cat-row" id="cat-row">
+      <button class="cat-btn cat-work" data-cat="work" onclick="pickCat('work')">💼 Work</button>
+      <button class="cat-btn cat-personal" data-cat="personal" onclick="pickCat('personal')">🏠 Personal</button>
+      <button class="cat-btn cat-ideas" data-cat="ideas" onclick="pickCat('ideas')">💡 Ideas</button>
+      <button class="cat-btn cat-journal" data-cat="journal" onclick="pickCat('journal')">📓 Journal</button>
+    </div>
+
+    <!-- Habits -->
+    <div class="habits-card glass" id="habits-card">
+      <div style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:6px">DAILY HABITS</div>
+      <div id="habits-list"></div>
+    </div>
+
     <div class="prompt-card glass" id="prompt-card" onclick="usePrompt()">
       <div class="prompt-label">✨ Daily Prompt</div>
       <div id="prompt-text"></div>
@@ -460,7 +562,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
   <!-- Insights -->
   <div class="tab-content" id="tab-insights">
-    <div class="chart-card glass"><div class="chart-title">📊 This Week's Activity</div><canvas class="chart-canvas" id="week-chart"></canvas></div>
+    <div class="heatmap-card glass"><div class="chart-title">🟩 90-Day Activity</div><div class="heatmap-grid" id="heatmap"></div><div class="hm-months" id="hm-months"></div></div>
+    <div class="chart-card glass"><div class="chart-title">📊 This Week</div><canvas class="chart-canvas" id="week-chart"></canvas></div>
     <div class="insight-grid">
       <div class="insight-item glass"><div class="insight-num" id="i-total">0</div><div class="insight-label">Total Notes</div></div>
       <div class="insight-item glass"><div class="insight-num" id="i-words">0</div><div class="insight-label">Total Words</div></div>
@@ -476,6 +579,25 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="filter-tags" id="filter-tags"></div>
     <div class="notes-list" id="all-notes"></div>
   </div>
+
+  <!-- Shop -->
+  <div class="tab-content" id="tab-shop">
+    <div class="xp-bank glass" id="xp-bank">⭐ 0 XP Available</div>
+    <div id="shop-content"></div>
+  </div>
+
+  <!-- Time Capsules -->
+  <div class="overlay" id="capsule-overlay"><div class="panel">
+    <div class="panel-header"><h2>⏰ Time Capsules</h2><button class="panel-close" onclick="closePanel('capsule-overlay')">✕</button></div>
+    <div style="margin-bottom:12px">
+      <textarea id="capsule-text" placeholder="Write a message to your future self..." style="width:100%;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.08);border-radius:12px;color:var(--text);padding:10px;font-family:'Nunito',sans-serif;font-size:.9rem;resize:none;min-height:80px"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input type="date" id="capsule-date" style="flex:1;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.08);border-radius:12px;color:var(--text);padding:8px 12px;font-family:'Nunito',sans-serif">
+        <button class="s-btn primary" style="width:auto;padding:8px 20px;margin:0" onclick="createCapsule()">Seal 🔒</button>
+      </div>
+    </div>
+    <div id="capsules-list"></div>
+  </div></div>
 
   <!-- Notion -->
   <div class="tab-content" id="tab-notion">
@@ -498,7 +620,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
   </div>
 
-  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v2.0</a></div></div>
+  <div class="footer"><div class="footer-text">© 2025 Kevin · Made with ❤️ · <a href="#">GroWthink v3.0</a></div></div>
 </div>
 
 <script>
@@ -612,7 +734,7 @@ function initMoods(){document.getElementById('mood-bar').innerHTML=MOODS.map(m=>
 function pickMood(m){C.mood=C.mood===m?'':m;saveC();document.querySelectorAll('.mood-btn').forEach(b=>b.classList.toggle('selected',b.dataset.mood===C.mood));}
 
 // ===== TABS =====
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();}));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();if(t.dataset.tab==='shop')renderShop();if(t.dataset.tab==='history')renderHistory();}));
 
 // ===== INPUT =====
 const NI=document.getElementById('note-input'),CC=document.getElementById('char-count');
@@ -626,7 +748,7 @@ function addNote(){
   if(S.lastNote){const ld=new Date(S.lastNote).toISOString().split('T')[0],y=new Date(now);y.setDate(y.getDate()-1);if(ld!==today){S.streak=ld===y.toISOString().split('T')[0]?S.streak+1:1;}}else S.streak=1;
   S.best=Math.max(S.best,S.streak);S.lastNote=now.toISOString();
   const tags=(text.match(/#\w+/g)||[]).map(t=>t.toLowerCase());
-  S.notes.unshift({id:Date.now(),text,date:now.toISOString(),day:today,mood:C.mood||'',tags,pinned:false});
+  S.notes.unshift({id:Date.now(),text,date:now.toISOString(),day:today,mood:C.mood||'',tags,pinned:false,cat:C.cat||''});
   S.health=Math.min(100,S.health+10);S.xp+=10+Math.floor(text.length/15);
   if(S.xp>=S.level*50){S.xp-=S.level*50;S.level++;showLevelUp();}
   checkBadges();save();NI.value='';NI.style.height='auto';CC.textContent='0';C.mood='';saveC();
@@ -653,7 +775,9 @@ function usePrompt(){NI.value=document.getElementById('prompt-text').textContent
 function noteHTML(n){
   const tags=n.tags?.length?`<div class="tags-row">${n.tags.map(t=>`<span class="tag-pill" onclick="filterTag('${t}')">${t}</span>`).join('')}</div>`:'';
   const mood=n.mood?`<span class="mood-indicator">${n.mood}</span>`:'';
-  return `<div class="note-card glass${n.pinned?' pinned':''}"><div class="note-text">${mood}${md(n.text)}</div>${tags}<div class="note-meta"><span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div class="note-actions"><button class="note-act-btn${n.pinned?' pinned-btn':''}" onclick="togglePin(${n.id})" title="Pin">📌</button><button class="note-act-btn" onclick="deleteNote(${n.id})">✕</button></div></div></div>`;
+  const catColors={work:'#3b82f6',personal:'#a855f7',ideas:'#f97316',journal:'#ec4899'};
+  const catLabel=n.cat?`<span class="note-cat" style="background:${catColors[n.cat]||'#888'}20;color:${catColors[n.cat]||'#888'}">${n.cat}</span>`:'';
+  return `<div class="note-card glass${n.pinned?' pinned':''}"><div class="note-text">${catLabel}${mood}${md(n.text)}</div>${tags}<div class="note-meta"><span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div class="note-actions"><button class="note-act-btn${n.pinned?' pinned-btn':''}" onclick="togglePin(${n.id})" title="Pin">📌</button><button class="note-act-btn" onclick="deleteNote(${n.id})">✕</button></div></div></div>`;
 }
 
 function renderMain(){
@@ -689,6 +813,7 @@ function renderHistory(){
 
 // ===== INSIGHTS =====
 function renderInsights(){
+  renderHeatmap();
   document.getElementById('i-total').textContent=S.notes.length;
   document.getElementById('i-words').textContent=S.notes.reduce((a,n)=>a+n.text.split(/\s+/).length,0);
   const days=new Set(S.notes.map(n=>n.day));
@@ -737,16 +862,238 @@ function startPomo(){if(pomoTimer)return;document.getElementById('pomo-start').s
 function stopPomo(){clearInterval(pomoTimer);pomoTimer=null;pomoLeft=25*60;pomoWork=true;document.getElementById('pomo-start').style.display='';document.getElementById('pomo-stop').style.display='none';document.getElementById('pomo-msg').textContent='';updatePomoDisplay();}
 function updatePomoDisplay(){const m=Math.floor(pomoLeft/60),s=pomoLeft%60;document.getElementById('pomo-time').textContent=`${m}:${String(s).padStart(2,'0')}`;document.getElementById('pomo-label').textContent=pomoWork?'Focus Time':'Break Time';const total=pomoWork?25*60:5*60,pct=(total-pomoLeft)/total;document.getElementById('pomo-arc').style.strokeDashoffset=609.4*(1-pct);}
 
-// ===== AMBIENT MUSIC =====
-let audioCtx,musicNode;
-function toggleMusic(){
-  if(!C.music){if(musicNode){musicNode.stop();musicNode=null;}return;}
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  if(musicNode)return;
-  const osc1=audioCtx.createOscillator(),osc2=audioCtx.createOscillator(),gain=audioCtx.createGain();
-  osc1.type='sine';osc1.frequency.value=174;osc2.type='sine';osc2.frequency.value=220;
-  gain.gain.value=.03;osc1.connect(gain);osc2.connect(gain);gain.connect(audioCtx.destination);
-  osc1.start();osc2.start();musicNode={stop:()=>{osc1.stop();osc2.stop();}};
+// ===== AMBIENT MUSIC (Lo-Fi Engine) =====
+function toggleMusic(){if(C.music){window.lofiEngine?.start();}else{window.lofiEngine?.stop();}}
+
+// ===== SHOP SYSTEM =====
+const SHOP_ITEMS=[
+  // Hats
+  {id:'hat_party',name:'Party Hat',emoji:'🎉',cost:50,cat:'hat'},
+  {id:'hat_crown',name:'Royal Crown',emoji:'👑',cost:150,cat:'hat'},
+  {id:'hat_top',name:'Top Hat',emoji:'🎩',cost:80,cat:'hat'},
+  {id:'hat_santa',name:'Santa Hat',emoji:'🎅',cost:100,cat:'hat'},
+  {id:'hat_wizard',name:'Wizard Hat',emoji:'🧙',cost:120,cat:'hat'},
+  {id:'hat_cowboy',name:'Cowboy Hat',emoji:'🤠',cost:90,cat:'hat'},
+  {id:'hat_cap',name:'Baseball Cap',emoji:'🧢',cost:40,cat:'hat'},
+  {id:'hat_helmet',name:'Knight Helm',emoji:'⚔️',cost:200,cat:'hat'},
+  {id:'hat_alien',name:'Alien Antenna',emoji:'👽',cost:180,cat:'hat'},
+  {id:'hat_chef',name:'Chef Hat',emoji:'👨‍🍳',cost:70,cat:'hat'},
+  // Accessories
+  {id:'acc_shades',name:'Cool Shades',emoji:'😎',cost:60,cat:'acc'},
+  {id:'acc_bow',name:'Bow Tie',emoji:'🎀',cost:40,cat:'acc'},
+  {id:'acc_scarf',name:'Cozy Scarf',emoji:'🧣',cost:50,cat:'acc'},
+  {id:'acc_medal',name:'Gold Medal',emoji:'🏅',cost:100,cat:'acc'},
+  {id:'acc_star',name:'Star Pin',emoji:'⭐',cost:30,cat:'acc'},
+  {id:'acc_heart',name:'Heart Charm',emoji:'💖',cost:45,cat:'acc'},
+  {id:'acc_shield',name:'Mini Shield',emoji:'🛡️',cost:80,cat:'acc'},
+  {id:'acc_guitar',name:'Tiny Guitar',emoji:'🎸',cost:120,cat:'acc'},
+  // Effects
+  {id:'fx_sparkle',name:'Sparkle Trail',emoji:'✨',cost:100,cat:'effect'},
+  {id:'fx_rainbow',name:'Rainbow Glow',emoji:'🌈',cost:150,cat:'effect'},
+  {id:'fx_hearts',name:'Floating Hearts',emoji:'💕',cost:80,cat:'effect'},
+  {id:'fx_stars',name:'Star Shower',emoji:'🌟',cost:90,cat:'effect'},
+  {id:'fx_fire',name:'Fire Aura',emoji:'🔥',cost:200,cat:'effect'},
+  {id:'fx_snow',name:'Personal Snow',emoji:'❄️',cost:120,cat:'effect'},
+  {id:'fx_bubbles',name:'Bubble Float',emoji:'🫧',cost:70,cat:'effect'},
+  {id:'fx_gold',name:'Golden Glow',emoji:'💛',cost:250,cat:'effect'},
+  // Pot Styles
+  {id:'pot_diamond',name:'Diamond Pot',emoji:'💎',cost:300,cat:'pot'},
+  {id:'pot_rainbow',name:'Rainbow Pot',emoji:'🌈',cost:200,cat:'pot'},
+  {id:'pot_neon',name:'Neon Pot',emoji:'💜',cost:150,cat:'pot'},
+  {id:'pot_gold',name:'Golden Pot',emoji:'🏆',cost:400,cat:'pot'},
+  {id:'pot_crystal',name:'Crystal Pot',emoji:'🔮',cost:250,cat:'pot'},
+  // Backgrounds
+  {id:'bg_galaxy',name:'Galaxy Scene',emoji:'🌌',cost:300,cat:'bg'},
+  {id:'bg_aurora',name:'Northern Lights',emoji:'🌌',cost:350,cat:'bg'},
+  {id:'bg_underwater',name:'Underwater',emoji:'🐠',cost:250,cat:'bg'},
+  {id:'bg_cherry',name:'Cherry Blossoms',emoji:'🌸',cost:200,cat:'bg'},
+  {id:'bg_campfire',name:'Campfire Night',emoji:'🏕️',cost:180,cat:'bg'},
+];
+
+function getSpendableXP(){return S.xp + (S.level-1)*50;} // Rough total XP earned
+function renderShop(){
+  const bank=S.xp;
+  document.getElementById('xp-bank').textContent=`⭐ ${bank} XP Available`;
+  const cats={hat:'🎩 Hats',acc:'✨ Accessories',effect:'🌟 Effects',pot:'🏺 Special Pots',bg:'🖼️ Backgrounds'};
+  let html='';
+  Object.entries(cats).forEach(([key,title])=>{
+    html+=`<div class="shop-cat-title">${title}</div><div class="shop-grid">`;
+    SHOP_ITEMS.filter(i=>i.cat===key).forEach(item=>{
+      const owned=S.owned?.includes(item.id);
+      const equipped=(S.equipped||{})[item.cat]===item.id;
+      html+=`<div class="shop-item glass${owned?' owned':''}${equipped?' equipped':''}" onclick="shopAction('${item.id}')">
+        ${owned?'<div class="shop-owned-badge">'+(equipped?'ON':'✓')+'</div>':''}
+        <div class="shop-emoji">${item.emoji}</div>
+        <div class="shop-name">${item.name}</div>
+        <div class="shop-cost">${owned?(equipped?'Equipped':'Tap to equip'):'⭐ '+item.cost+' XP'}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('shop-content').innerHTML=html;
+}
+
+function shopAction(id){
+  if(!S.owned)S.owned=[];
+  if(!S.equipped)S.equipped={};
+  const item=SHOP_ITEMS.find(i=>i.id===id);if(!item)return;
+  if(S.owned.includes(id)){
+    // Toggle equip
+    if(S.equipped[item.cat]===id)S.equipped[item.cat]='';
+    else S.equipped[item.cat]=id;
+    save();renderShop();applyCosmetics();
+  } else {
+    if(S.xp<item.cost){alert('Not enough XP! You need '+item.cost+' XP.');return;}
+    S.xp-=item.cost;
+    S.owned.push(id);
+    S.equipped[item.cat]=id;
+    save();renderShop();renderXP();applyCosmetics();
+  }
+}
+
+function applyCosmetics(){
+  const eq=S.equipped||{};
+  // Hat
+  const hatEl=document.getElementById('plant-hat');
+  if(eq.hat){const item=SHOP_ITEMS.find(i=>i.id===eq.hat);hatEl.style.display='block';hatEl.textContent=item?.emoji||'';hatEl.style.top='-25px';hatEl.style.left='50%';hatEl.style.transform='translateX(-50%)';}
+  else hatEl.style.display='none';
+  // Accessory
+  const accEl=document.getElementById('plant-acc');
+  if(eq.acc){const item=SHOP_ITEMS.find(i=>i.id===eq.acc);accEl.style.display='block';accEl.textContent=item?.emoji||'';accEl.style.bottom='20px';accEl.style.left='50%';accEl.style.transform='translateX(-50%);';accEl.style.fontSize='1.2rem';}
+  else accEl.style.display='none';
+  // Effect
+  const fxEl=document.getElementById('plant-effect');
+  if(eq.effect){
+    const item=SHOP_ITEMS.find(i=>i.id===eq.effect);
+    const t=THEMES[C.theme]||THEMES.green;
+    if(eq.effect==='fx_rainbow')fxEl.innerHTML=`<div class="glow-effect" style="width:80px;height:80px;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,100,100,.2),rgba(100,255,100,.1),rgba(100,100,255,.1))"></div>`;
+    else if(eq.effect==='fx_gold')fxEl.innerHTML=`<div class="glow-effect" style="width:70px;height:70px;position:absolute;bottom:65px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,215,0,.3),transparent)"></div>`;
+    else if(eq.effect==='fx_fire')fxEl.innerHTML=`<div class="glow-effect" style="width:60px;height:60px;position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,100,0,.3),transparent)"></div>`;
+    else fxEl.innerHTML=`<div style="position:absolute;bottom:80px;left:50%;transform:translateX(-50%);font-size:1.5rem;animation:seasonFloat 3s ease-in-out infinite">${item?.emoji||''}</div>`;
+  } else fxEl.innerHTML='';
+}
+
+// ===== HABITS =====
+const DEFAULT_HABITS=[{id:'water',name:'💧 Drink Water',icon:'💧'},{id:'exercise',name:'🏃 Exercise',icon:'🏃'},{id:'read',name:'📖 Read',icon:'📖'},{id:'meditate',name:'🧘 Meditate',icon:'🧘'}];
+function getHabits(){return S.habits||DEFAULT_HABITS.map(h=>({...h,done:{}}));}
+function renderHabits(){
+  const habits=getHabits();const today=new Date().toISOString().split('T')[0];
+  document.getElementById('habits-list').innerHTML=habits.map((h,i)=>{
+    const done=h.done?.[today];
+    let streak=0;for(let d=0;d<30;d++){const dd=new Date();dd.setDate(dd.getDate()-d);if(h.done?.[dd.toISOString().split('T')[0]])streak++;else break;}
+    return `<div class="habit-row"><button class="habit-check${done?' done':''}" onclick="toggleHabit(${i})">${done?'✓':''}</button><span class="habit-name">${h.name}</span><span class="habit-streak">${streak>0?streak+'d':''}</span></div>`;
+  }).join('');
+}
+function toggleHabit(i){
+  if(!S.habits)S.habits=DEFAULT_HABITS.map(h=>({...h,done:{}}));
+  const today=new Date().toISOString().split('T')[0];
+  if(!S.habits[i].done)S.habits[i].done={};
+  S.habits[i].done[today]=!S.habits[i].done[today];
+  if(S.habits[i].done[today]){S.xp+=5;renderXP();}// Bonus XP
+  save();renderHabits();
+}
+
+// ===== CATEGORIES =====
+function pickCat(cat){C.cat=C.cat===cat?'':cat;saveC();document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===C.cat));}
+
+// ===== TEMPLATES =====
+const TEMPLATES={
+  grateful:'Today I am grateful for:\n1. \n2. \n3. ',
+  meeting:'📋 Meeting Notes\nDate: '+new Date().toLocaleDateString()+'\nAttendees: \nAgenda:\n- \nAction Items:\n- ',
+  reflect:'🌙 Evening Reflection\nWhat went well today?\n\nWhat could improve?\n\nWhat am I looking forward to tomorrow?\n',
+  braindump:'🧠 Brain Dump\nJust let it all out...\n\n'
+};
+function useTemplate(t){NI.value=TEMPLATES[t]||'';NI.focus();NI.style.height='auto';NI.style.height=Math.min(NI.scrollHeight,150)+'px';CC.textContent=NI.value.length;}
+
+// ===== TIME CAPSULES =====
+document.getElementById('capsule-open').addEventListener('click',()=>{openPanel('capsule-overlay');renderCapsules();});
+function createCapsule(){
+  const text=document.getElementById('capsule-text').value.trim();
+  const date=document.getElementById('capsule-date').value;
+  if(!text||!date){alert('Write a message and pick a date!');return;}
+  if(!S.capsules)S.capsules=[];
+  S.capsules.push({id:Date.now(),text,unlockDate:date,created:new Date().toISOString()});
+  save();document.getElementById('capsule-text').value='';renderCapsules();
+}
+function renderCapsules(){
+  if(!S.capsules)S.capsules=[];
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('capsules-list').innerHTML=S.capsules.map(c=>{
+    const unlocked=today>=c.unlockDate;
+    return `<div class="capsule-card glass${unlocked?' capsule-unlock':''}">
+      <div class="capsule-date">${unlocked?'🔓 Unlocked!':'🔒 Opens '+c.unlockDate}</div>
+      <div class="${unlocked?'':'capsule-locked'}" style="margin-top:8px;font-size:.9rem">${unlocked?esc(c.text):'This message is sealed...'}</div>
+    </div>`;
+  }).join('')||'<div class="empty-state"><div class="emoji">⏰</div><p>Write a message to your future self!</p></div>';
+}
+
+// ===== STREAK FREEZE =====
+function checkFreeze(){
+  if(!S.freezes)S.freezes=0;
+  if(!S.lastFreezeAward)S.lastFreezeAward=0;
+  // Award a freeze every 7 days of streak
+  const freezesEarned=Math.floor(S.best/7);
+  if(freezesEarned>S.lastFreezeAward){S.freezes+=freezesEarned-S.lastFreezeAward;S.lastFreezeAward=freezesEarned;save();}
+  const el=document.getElementById('freeze-badge');
+  if(S.freezes>0){el.style.display='inline-flex';document.getElementById('freeze-count').textContent=S.freezes;}
+  else el.style.display='none';
+}
+
+// ===== CALENDAR HEATMAP =====
+function renderHeatmap(){
+  const el=document.getElementById('heatmap');
+  let html='';const today=new Date();
+  for(let i=89;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const day=d.toISOString().split('T')[0];
+    const count=S.notes.filter(n=>n.day===day).length;
+    const lvl=count===0?'':count<=2?'l1':count<=4?'l2':count<=7?'l3':'l4';
+    html+=`<div class="hm-cell ${lvl}" title="${day}: ${count} notes"></div>`;
+  }
+  el.innerHTML=html;
+  // Month labels
+  const months=[];for(let i=89;i>=0;i-=30){const d=new Date(today);d.setDate(d.getDate()-i);months.push(d.toLocaleDateString([],{month:'short'}));}
+  document.getElementById('hm-months').innerHTML=months.map(m=>`<span>${m}</span>`).join('');
+}
+
+// ===== WEATHER IN SCENE =====
+function fetchWeather(){
+  if(!navigator.geolocation)return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
+    .then(r=>r.json()).then(d=>{
+      if(d.current_weather)applyWeather(d.current_weather);
+    }).catch(()=>{});
+  },()=>{},{ timeout: 5000 });
+}
+function applyWeather(w){
+  const el=document.getElementById('weather-overlay');
+  const code=w.weathercode;
+  if([61,63,65,80,81,82].includes(code)){// Rain
+    let rain='';for(let i=0;i<30;i++){rain+=`<div class="rain-drop" style="left:${Math.random()*100}%;height:${10+Math.random()*15}px;animation-duration:${.5+Math.random()*.5}s;animation-delay:${Math.random()*2}s;top:${-Math.random()*20}px"></div>`;}
+    el.innerHTML=rain;
+  } else if([71,73,75,77].includes(code)){// Snow
+    let snow='';for(let i=0;i<20;i++){snow+=`<div class="snow-flake" style="left:${Math.random()*100}%;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px;animation-duration:${3+Math.random()*4}s;animation-delay:${Math.random()*5}s"></div>`;}
+    el.innerHTML=snow;
+  } else el.innerHTML='';
+}
+
+// ===== SEASONAL EVENTS =====
+function applySeasonal(){
+  const month=new Date().getMonth();const el=document.getElementById('seasonal-decos');
+  const scene=document.getElementById('scene');
+  if(month===11||month===0){// Dec-Jan: Winter
+    let s='';for(let i=0;i<5;i++)s+=`<div class="seasonal-deco" style="left:${10+Math.random()*80}%;top:${5+Math.random()*30}%;animation-delay:${Math.random()*6}s;font-size:${.8+Math.random()*.6}rem">❄️</div>`;
+    el.innerHTML=s;
+  } else if(month>=2&&month<=4){// Mar-May: Spring
+    let s='';const flowers=['🌸','🌺','🌼','🦋'];for(let i=0;i<4;i++)s+=`<div class="seasonal-deco" style="left:${5+Math.random()*90}%;top:${5+Math.random()*25}%;animation-delay:${Math.random()*6}s;font-size:${.7+Math.random()*.5}rem">${flowers[i%flowers.length]}</div>`;
+    el.innerHTML=s;
+  } else if(month>=5&&month<=7){// Jun-Aug: Summer
+    el.innerHTML='';// Clear summer sky
+  } else if(month>=8&&month<=10){// Sep-Nov: Autumn
+    let s='';const leaves=['🍂','🍁','🎃'];for(let i=0;i<4;i++)s+=`<div class="seasonal-deco" style="left:${10+Math.random()*80}%;top:${10+Math.random()*20}%;animation-delay:${Math.random()*6}s">${leaves[i%leaves.length]}</div>`;
+    el.innerHTML=s;
+  }
 }
 
 // ===== CHAT =====
@@ -822,7 +1169,9 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(
 (function(){const old=localStorage.getItem('growthink');if(old&&!localStorage.getItem('gt_state')){const o=JSON.parse(old);S.notes=o.notes||[];S.health=o.health||100;S.level=o.level||1;S.xp=o.xp||0;S.streak=o.streak||0;S.best=o.bestStreak||o.streak||0;S.lastNote=o.lastNoteDate;S.notes.forEach(n=>{if(!n.tags)n.tags=[];if(!n.mood)n.mood='';if(n.pinned===undefined)n.pinned=false;});save();}})();
 
 // ===== INIT =====
-initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();render();
+initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();renderHabits();checkFreeze();applySeasonal();applyCosmetics();render();
+// Try weather
+setTimeout(fetchWeather,2000);
 setInterval(()=>{witherCheck();renderH();renderPlant();updateSky();},60000);
 setInterval(renderQuote,300000);
 </script>
