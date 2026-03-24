@@ -5,303 +5,754 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1a1a2e">
+<meta name="theme-color" content="#0a0a1a">
 <title>GroWthink 🌱</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-  font-family:'Nunito',sans-serif;
-  background:#1a1a2e;
-  color:#eee;
-  min-height:100vh;
-  overflow-x:hidden;
-  -webkit-tap-highlight-color:transparent;
+:root {
+  --bg: #0a0a1a;
+  --card: #111128;
+  --card2: #16163a;
+  --accent: #00e6a7;
+  --accent2: #00c9ff;
+  --accent-glow: rgba(0,230,167,0.15);
+  --danger: #ff4757;
+  --warning: #ffa502;
+  --text: #e8e8f0;
+  --muted: #5a5a7a;
+  --border: #1e1e3a;
 }
 
-.app{max-width:500px;margin:0 auto;padding:16px;min-height:100vh;display:flex;flex-direction:column}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ambient background */
+.ambient {
+  position: fixed; top:0; left:0; right:0; bottom:0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbFloat 20s ease-in-out infinite;
+}
+
+.orb1 {
+  width: 300px; height: 300px;
+  background: rgba(0,230,167,0.06);
+  top: -100px; right: -100px;
+  animation-delay: 0s;
+}
+
+.orb2 {
+  width: 250px; height: 250px;
+  background: rgba(0,201,255,0.05);
+  bottom: -50px; left: -80px;
+  animation-delay: -7s;
+}
+
+.orb3 {
+  width: 200px; height: 200px;
+  background: rgba(155,89,182,0.04);
+  top: 40%; left: 50%;
+  animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-20px) scale(1.1); }
+  66% { transform: translate(-20px,30px) scale(0.9); }
+}
+
+/* App container */
+.app {
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto;
+  padding: 16px; min-height: 100vh;
+  display: flex; flex-direction: column;
+}
 
 /* Header */
-.header{text-align:center;padding:12px 0 8px}
-.header h1{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#00b894,#55efc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header .streak{font-size:0.85rem;color:#888;margin-top:2px}
-
-/* Plant container */
-.plant-area{
-  position:relative;
-  height:220px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  margin:8px 0;
-  overflow:hidden;
+.header {
+  text-align: center;
+  padding: 16px 0 8px;
 }
 
-.ground{
-  position:absolute;bottom:0;left:0;right:0;height:40px;
-  background:linear-gradient(180deg,#4a3728,#3d2e1f);
-  border-radius:20px 20px 0 0;
+.logo {
+  font-size: 1.8rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
 }
 
-.pot{
-  position:absolute;bottom:25px;
-  width:80px;height:55px;
-  background:linear-gradient(180deg,#c0392b,#a93226);
-  border-radius:0 0 15px 15px;
-  z-index:2;
-}
-.pot::before{
-  content:'';position:absolute;top:-8px;left:-5px;
-  width:90px;height:12px;
-  background:#e74c3c;border-radius:6px;
+.subtitle {
+  font-size: 0.8rem; color: var(--muted);
+  margin-top: 4px;
 }
 
-.plant{
-  position:absolute;bottom:75px;
-  display:flex;flex-direction:column;align-items:center;
-  z-index:1;
-  transition:all 1s ease;
+.streak-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, rgba(255,165,2,0.15), rgba(255,71,87,0.1));
+  border: 1px solid rgba(255,165,2,0.2);
+  padding: 4px 14px; border-radius: 20px;
+  font-size: 0.8rem; font-weight: 700;
+  color: #ffa502; margin-top: 8px;
 }
 
-.stem{
-  width:4px;
-  background:linear-gradient(180deg,#27ae60,#2ecc71);
-  border-radius:2px;
-  transition:height 1s ease;
+/* Scene */
+.scene {
+  position: relative;
+  height: 280px;
+  margin: 8px 0;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 40%, #2d4a3e 70%, #1a3a2a 100%);
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 
-.leaf{
-  position:absolute;
-  width:0;height:0;
-  transition:all 0.8s ease;
+/* Stars */
+.stars { position: absolute; top: 0; left: 0; right: 0; height: 50%; }
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
 }
 
-.leaf-left{
-  border-right:20px solid #27ae60;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-  transform-origin:right center;
-  right:2px;
+@keyframes twinkle {
+  0%,100% { opacity: 0.2; }
+  50% { opacity: 1; }
 }
 
-.leaf-right{
-  border-left:20px solid #2ecc71;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-  transform-origin:left center;
-  left:2px;
+/* Moon */
+.moon {
+  position: absolute; top: 25px; right: 30px;
+  width: 35px; height: 35px;
+  background: radial-gradient(circle at 35% 35%, #ffeaa7, #fdcb6e);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(253,203,110,0.3), 0 0 60px rgba(253,203,110,0.1);
 }
 
-.flower{
-  width:30px;height:30px;
-  position:relative;
-  transition:all 0.8s ease;
+/* Fireflies */
+.firefly {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: #ffeaa7;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ffeaa7, 0 0 12px rgba(255,234,167,0.5);
+  animation: fireflyMove 8s ease-in-out infinite;
 }
 
-.petal{
-  position:absolute;
-  width:12px;height:12px;
-  background:#f39c12;
-  border-radius:50%;
+@keyframes fireflyMove {
+  0% { transform: translate(0,0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(40px,-30px); opacity: 0.6; }
+  90% { opacity: 1; }
+  100% { transform: translate(-10px,10px); opacity: 0; }
 }
 
-.flower-center{
-  position:absolute;
-  width:10px;height:10px;
-  background:#e74c3c;
-  border-radius:50%;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  z-index:1;
+/* Ground */
+.ground-layer {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+  background: linear-gradient(180deg, #2d4a3e, #1a3320);
 }
 
-/* Health bar */
-.health-bar{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 16px;margin:4px 0;
-}
-.health-label{font-size:0.8rem;color:#888;min-width:50px}
-.health-track{flex:1;height:8px;background:#2d2d44;border-radius:4px;overflow:hidden}
-.health-fill{height:100%;border-radius:4px;transition:width 0.5s ease,background 0.5s ease}
-.health-value{font-size:0.8rem;color:#888;min-width:30px;text-align:right}
-
-/* Stats */
-.stats{
-  display:flex;justify-content:space-around;
-  padding:8px 0;margin:4px 0;
-  border-top:1px solid #2d2d44;
-  border-bottom:1px solid #2d2d44;
-}
-.stat{text-align:center}
-.stat-num{font-size:1.3rem;font-weight:800;color:#55efc4}
-.stat-label{font-size:0.7rem;color:#888;text-transform:uppercase;letter-spacing:1px}
-
-/* Notes section */
-.notes-section{flex:1;display:flex;flex-direction:column;margin-top:8px}
-
-.add-note{
-  display:flex;gap:8px;margin-bottom:12px;
+.grass {
+  position: absolute; bottom: 55px; left: 0; right: 0;
+  height: 25px;
+  display: flex; justify-content: space-around;
 }
 
-.add-note textarea{
-  flex:1;
-  background:#16213e;
-  border:2px solid #2d2d44;
-  border-radius:12px;
-  color:#eee;
-  padding:12px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.95rem;
-  resize:none;
-  min-height:50px;
-  max-height:120px;
-  transition:border-color 0.3s;
-}
-.add-note textarea:focus{outline:none;border-color:#00b894}
-.add-note textarea::placeholder{color:#555}
-
-.add-note button{
-  align-self:flex-end;
-  width:50px;height:50px;
-  border:none;border-radius:50%;
-  background:linear-gradient(135deg,#00b894,#55efc4);
-  color:#1a1a2e;
-  font-size:1.5rem;
-  font-weight:800;
-  cursor:pointer;
-  transition:transform 0.2s,box-shadow 0.2s;
-  flex-shrink:0;
-}
-.add-note button:active{transform:scale(0.9)}
-
-.notes-list{
-  flex:1;overflow-y:auto;
-  display:flex;flex-direction:column;gap:8px;
-  padding-bottom:20px;
+.grass-blade {
+  width: 3px;
+  background: linear-gradient(180deg, #27ae60, #1a6b37);
+  border-radius: 2px 2px 0 0;
+  transform-origin: bottom center;
+  animation: grassSway 4s ease-in-out infinite;
 }
 
-.note-card{
-  background:#16213e;
-  border-radius:12px;
-  padding:12px;
-  border-left:3px solid #00b894;
-  animation:slideIn 0.3s ease;
+@keyframes grassSway {
+  0%,100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
 }
 
-@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-
-.note-card .note-text{font-size:0.9rem;line-height:1.5;color:#ddd}
-.note-card .note-meta{font-size:0.7rem;color:#666;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
-.note-card .delete-btn{
-  background:none;border:none;color:#555;font-size:0.8rem;cursor:pointer;padding:2px 6px;border-radius:4px;
-}
-.note-card .delete-btn:hover{color:#e74c3c;background:rgba(231,76,60,0.1)}
-
-.empty-state{
-  text-align:center;padding:40px 20px;color:#555;
-}
-.empty-state .emoji{font-size:3rem;margin-bottom:8px}
-.empty-state p{font-size:0.9rem}
-
-/* Withering effect */
-.plant.withering .stem{background:linear-gradient(180deg,#7f6b3e,#8B7355)!important}
-.plant.withering .leaf-left{border-right-color:#7f6b3e!important}
-.plant.withering .leaf-right{border-left-color:#8B7355!important}
-
-/* Particles */
-.particle{
-  position:absolute;
-  pointer-events:none;
-  border-radius:50%;
-  animation:particleFloat 2s ease forwards;
+/* Pot */
+.pot-container {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%); z-index: 5;
 }
 
-@keyframes particleFloat{
-  0%{opacity:1;transform:translateY(0) scale(1)}
-  100%{opacity:0;transform:translateY(-60px) scale(0.3)}
+.pot-body {
+  width: 70px; height: 50px;
+  background: linear-gradient(135deg, #c0392b, #96281b);
+  border-radius: 5px 5px 18px 18px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
-/* Confetti burst on level up */
-.level-up-banner{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-  background:linear-gradient(135deg,#00b894,#55efc4);
-  color:#1a1a2e;padding:20px 40px;border-radius:20px;
-  font-size:1.3rem;font-weight:800;
-  z-index:100;
-  animation:popIn 0.5s ease, popOut 0.5s ease 1.5s forwards;
-  text-align:center;
-  box-shadow:0 10px 40px rgba(0,184,148,0.4);
+.pot-rim {
+  position: absolute; top: -7px; left: -6px;
+  width: 82px; height: 10px;
+  background: linear-gradient(180deg, #e74c3c, #c0392b);
+  border-radius: 5px;
 }
 
-@keyframes popIn{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
-@keyframes popOut{from{opacity:1}to{opacity:0;pointer-events:none}}
+.pot-soil {
+  position: absolute; top: 3px; left: 5px; right: 5px;
+  height: 12px;
+  background: linear-gradient(180deg, #4a3728, #3d2e1f);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Plant */
+.plant-container {
+  position: absolute; bottom: 95px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.stem-segment {
+  width: 5px; margin: 0 auto;
+  border-radius: 3px;
+  position: relative;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stem-healthy { background: linear-gradient(180deg, #2ecc71, #27ae60); }
+.stem-wither { background: linear-gradient(180deg, #8B7355, #7f6b3e); }
+
+.leaf-svg {
+  position: absolute;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.leaf-svg.sway-left { animation: leafSwayL 5s ease-in-out infinite; }
+.leaf-svg.sway-right { animation: leafSwayR 5s ease-in-out infinite; }
+
+@keyframes leafSwayL {
+  0%,100% { transform: rotate(0deg); }
+  50% { transform: rotate(-8deg); }
+}
+@keyframes leafSwayR {
+  0%,100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+
+/* Flower */
+.flower-container {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  animation: flowerBob 4s ease-in-out infinite;
+}
+
+@keyframes flowerBob {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-3px); }
+}
+
+.flower-petal-ring {
+  position: relative;
+  animation: flowerSpin 30s linear infinite;
+}
+
+@keyframes flowerSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.flower-petal {
+  position: absolute;
+  border-radius: 50% 50% 50% 0;
+  transform-origin: bottom right;
+}
+
+.flower-center-dot {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffeaa7, #f39c12);
+  box-shadow: 0 0 8px rgba(243,156,18,0.5);
+  z-index: 2;
+}
+
+/* Water drops animation */
+.water-drop {
+  position: absolute; z-index: 10;
+  width: 8px; height: 12px;
+  background: radial-gradient(ellipse at 30% 20%, rgba(100,200,255,0.9), rgba(0,150,255,0.6));
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: waterFall 1s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+  pointer-events: none;
+}
+
+@keyframes waterFall {
+  0% { opacity: 1; transform: translateY(-80px) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(0px) scale(0.5); }
+}
+
+/* Sparkle on note add */
+.sparkle {
+  position: absolute; pointer-events: none; z-index: 10;
+  animation: sparklePop 0.8s ease-out forwards;
+}
+
+@keyframes sparklePop {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+/* XP bar */
+.xp-section {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: var(--card);
+  border-radius: 16px;
+  margin: 8px 0;
+  border: 1px solid var(--border);
+}
+
+.xp-icon { font-size: 1.5rem; }
+
+.xp-info { flex: 1; }
+.xp-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.xp-track {
+  height: 6px; background: #1e1e3a;
+  border-radius: 3px; overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.xp-fill::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 20px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  animation: xpShine 2s ease-in-out infinite;
+}
+
+@keyframes xpShine {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Health */
+.health-section {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: var(--card);
+  border-radius: 16px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.health-icon { font-size: 1.2rem; }
+.health-info { flex: 1; }
+.health-label-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.health-track { height: 6px; background: #1e1e3a; border-radius: 3px; overflow: hidden; }
+.health-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.8s ease, background 0.5s ease;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin: 8px 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.stat-card:active { transform: scale(0.95); }
+
+.stat-icon { font-size: 1.2rem; margin-bottom: 2px; }
+.stat-num {
+  font-size: 1.3rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 0.6rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
 
 /* Tabs */
-.tab-bar{
-  display:flex;gap:4px;margin-bottom:8px;
+.tab-bar {
+  display: flex; gap: 4px;
+  background: var(--card);
+  border-radius: 14px; padding: 4px;
+  margin: 8px 0;
+  border: 1px solid var(--border);
 }
-.tab{
-  flex:1;padding:8px;text-align:center;
-  background:#16213e;border:none;border-radius:10px;
-  color:#888;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:600;
-  cursor:pointer;transition:all 0.2s;
-}
-.tab.active{background:#00b894;color:#1a1a2e}
 
-.tab-content{display:none}
-.tab-content.active{display:flex;flex-direction:column;flex:1}
+.tab {
+  flex: 1; padding: 10px 8px;
+  text-align: center;
+  background: transparent;
+  border: none; border-radius: 11px;
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+  box-shadow: 0 4px 15px rgba(0,230,167,0.2);
+}
+
+/* Note input */
+.input-area {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-area:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.input-area textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  line-height: 1.5;
+}
+
+.input-area textarea:focus { outline: none; }
+.input-area textarea::placeholder { color: #3a3a5a; }
+
+.input-footer {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.char-count { font-size: 0.7rem; color: var(--muted); }
+
+.send-btn {
+  width: 42px; height: 42px;
+  border: none; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+  font-size: 1.3rem; font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,230,167,0.25);
+}
+
+.send-btn:active {
+  transform: scale(0.88);
+  box-shadow: 0 2px 8px rgba(0,230,167,0.3);
+}
+
+.send-btn svg {
+  width: 20px; height: 20px;
+  fill: #0a0a1a;
+}
+
+/* Notes list */
+.notes-list {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 8px; padding-bottom: 30px;
+}
+
+.note-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  animation: cardSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.note-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  border-radius: 3px 0 0 3px;
+}
+
+@keyframes cardSlide {
+  from { opacity: 0; transform: translateY(-15px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.note-text {
+  font-size: 0.9rem; line-height: 1.6;
+  color: #ccc; padding-left: 10px;
+}
+
+.note-meta {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  margin-top: 8px; padding-left: 10px;
+}
+
+.note-time {
+  font-size: 0.7rem; color: var(--muted);
+  display: flex; align-items: center; gap: 4px;
+}
+
+.delete-btn {
+  background: none; border: none;
+  color: #3a3a5a; font-size: 0.85rem;
+  cursor: pointer; padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover { color: var(--danger); background: rgba(255,71,87,0.1); }
+
+.day-header {
+  font-size: 0.7rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 12px 0 4px; font-weight: 700;
+}
+
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: var(--muted);
+}
+.empty-state .emoji { font-size: 3rem; margin-bottom: 8px; }
+.empty-state p { font-size: 0.85rem; line-height: 1.6; }
+
+/* Motivation quote */
+.quote-card {
+  background: linear-gradient(135deg, rgba(0,230,167,0.08), rgba(0,201,255,0.05));
+  border: 1px solid rgba(0,230,167,0.15);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  font-size: 0.8rem;
+  color: #8a8aaa;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Level up overlay */
+.level-up-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.level-up-card {
+  background: linear-gradient(135deg, #111128, #1a1a3e);
+  border: 2px solid var(--accent);
+  border-radius: 24px;
+  padding: 32px;
+  text-align: center;
+  max-width: 300px;
+  animation: popBounce 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 0 60px rgba(0,230,167,0.2);
+}
+
+@keyframes popBounce {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.level-up-card .lu-icon { font-size: 3rem; margin-bottom: 8px; }
+.level-up-card .lu-title {
+  font-size: 1.5rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.level-up-card .lu-sub { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+
+.level-up-card button {
+  margin-top: 20px;
+  padding: 10px 30px;
+  border: none; border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer;
+}
+
+.tab-content { display: none; flex-direction: column; flex: 1; }
+.tab-content.active { display: flex; }
+
+/* Scrollbar */
+.notes-list::-webkit-scrollbar { width: 4px; }
+.notes-list::-webkit-scrollbar-track { background: transparent; }
+.notes-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 </style>
 </head>
 <body>
 
+<div class="ambient">
+  <div class="ambient-orb orb1"></div>
+  <div class="ambient-orb orb2"></div>
+  <div class="ambient-orb orb3"></div>
+</div>
+
 <div class="app">
   <div class="header">
-    <h1>🌱 GroWthink</h1>
-    <div class="streak" id="streak">Start writing to grow your plant!</div>
+    <div class="logo">🌱 GroWthink</div>
+    <div class="subtitle">Grow your mind, grow your plant</div>
+    <div class="streak-badge" id="streak-badge" style="display:none">
+      <span>🔥</span><span id="streak-text"></span>
+    </div>
   </div>
 
-  <div class="plant-area" id="plant-area">
-    <div class="ground"></div>
-    <div class="pot"></div>
-    <div class="plant" id="plant"></div>
+  <!-- Scene -->
+  <div class="scene" id="scene">
+    <div class="stars" id="stars"></div>
+    <div class="moon"></div>
+    <div class="ground-layer"></div>
+    <div class="grass" id="grass"></div>
+    <div class="pot-container">
+      <div class="pot-body">
+        <div class="pot-rim"></div>
+        <div class="pot-soil"></div>
+      </div>
+    </div>
+    <div class="plant-container" id="plant"></div>
   </div>
 
-  <div class="health-bar">
-    <span class="health-label">Health</span>
-    <div class="health-track"><div class="health-fill" id="health-fill"></div></div>
-    <span class="health-value" id="health-value">100%</span>
+  <!-- XP bar -->
+  <div class="xp-section">
+    <div class="xp-icon">⭐</div>
+    <div class="xp-info">
+      <div class="xp-label">
+        <span>Level <b id="xp-level">1</b></span>
+        <span id="xp-text">0 / 50 XP</span>
+      </div>
+      <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+    </div>
   </div>
 
-  <div class="stats">
-    <div class="stat">
+  <!-- Health -->
+  <div class="health-section">
+    <div class="health-icon" id="health-icon">💚</div>
+    <div class="health-info">
+      <div class="health-label-row">
+        <span>Plant Health</span>
+        <span id="health-value">100%</span>
+      </div>
+      <div class="health-track"><div class="health-fill" id="health-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📝</div>
       <div class="stat-num" id="stat-notes">0</div>
       <div class="stat-label">Notes</div>
     </div>
-    <div class="stat">
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
       <div class="stat-num" id="stat-streak">0</div>
-      <div class="stat-label">Day Streak</div>
+      <div class="stat-label">Streak</div>
     </div>
-    <div class="stat">
-      <div class="stat-num" id="stat-level">1</div>
-      <div class="stat-label">Level</div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-num" id="stat-today">0</div>
+      <div class="stat-label">Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏆</div>
+      <div class="stat-num" id="stat-best">0</div>
+      <div class="stat-label">Best</div>
     </div>
   </div>
 
+  <!-- Quote -->
+  <div class="quote-card" id="quote"></div>
+
+  <!-- Tabs -->
   <div class="tab-bar">
     <button class="tab active" data-tab="write">✏️ Write</button>
     <button class="tab" data-tab="history">📚 History</button>
   </div>
 
+  <!-- Write tab -->
   <div class="tab-content active" id="tab-write">
-    <div class="add-note">
-      <textarea id="note-input" placeholder="What's on your mind? 🌿" rows="2"></textarea>
-      <button id="add-btn">+</button>
+    <div class="input-area">
+      <textarea id="note-input" placeholder="What's on your mind? ✨" rows="2"></textarea>
+      <div class="input-footer">
+        <span class="char-count" id="char-count">0</span>
+        <button class="send-btn" id="add-btn">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
     </div>
     <div class="notes-list" id="today-notes"></div>
   </div>
 
+  <!-- History tab -->
   <div class="tab-content" id="tab-history">
     <div class="notes-list" id="all-notes"></div>
   </div>
@@ -310,38 +761,87 @@ body{
 <script>
 // State
 let state = JSON.parse(localStorage.getItem('growthink') || 'null') || {
-  notes: [],
-  health: 100,
-  level: 1,
-  xp: 0,
-  streak: 0,
-  lastNoteDate: null,
-  createdAt: Date.now()
+  notes: [], health: 100, level: 1, xp: 0,
+  streak: 0, bestStreak: 0, lastNoteDate: null, createdAt: Date.now()
 };
 
-const plantEl = document.getElementById('plant');
-const healthFill = document.getElementById('health-fill');
-const healthValue = document.getElementById('health-value');
-const streakEl = document.getElementById('streak');
-const noteInput = document.getElementById('note-input');
-const todayNotes = document.getElementById('today-notes');
-const allNotes = document.getElementById('all-notes');
+const quotes = [
+  '"The best time to plant a tree was 20 years ago. The second best time is now."',
+  '"Small daily improvements are the key to staggering long-term results."',
+  '"Write it down. Written goals have a way of transforming wishes into wants."',
+  '"The only way to do great work is to love what you do." — Steve Jobs',
+  '"Your mind is a garden, your thoughts are the seeds."',
+  '"A journey of a thousand miles begins with a single step." — Lao Tzu',
+  '"What you plant now, you will harvest later." — Og Mandino',
+  '"Growth is never by mere chance; it is the result of forces working together."',
+  '"Don\'t judge each day by the harvest you reap but by the seeds you plant."',
+  '"The expert in anything was once a beginner."',
+  '"Consistency is what transforms average into excellence."',
+  '"One note a day keeps the withering away. 🌱"'
+];
+
+// Init scene
+function initScene(){
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<30;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*3+'s';
+    s.style.width=s.style.height=(1+Math.random()*2)+'px';
+    starsEl.appendChild(s);
+  }
+
+  // Fireflies
+  const scene = document.getElementById('scene');
+  for(let i=0;i<5;i++){
+    const f = document.createElement('div');
+    f.className='firefly';
+    f.style.left=(20+Math.random()*60)+'%';
+    f.style.top=(30+Math.random()*40)+'%';
+    f.style.animationDelay=Math.random()*8+'s';
+    f.style.animationDuration=(6+Math.random()*6)+'s';
+    scene.appendChild(f);
+  }
+
+  // Grass
+  const grassEl = document.getElementById('grass');
+  for(let i=0;i<40;i++){
+    const g = document.createElement('div');
+    g.className='grass-blade';
+    g.style.height=(8+Math.random()*17)+'px';
+    g.style.animationDelay=Math.random()*4+'s';
+    g.style.opacity=0.5+Math.random()*0.5;
+    grassEl.appendChild(g);
+  }
+}
 
 // Tabs
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-    if(tab.dataset.tab === 'history') renderAllNotes();
+    document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+    if(tab.dataset.tab==='history') renderAllNotes();
   });
 });
 
-// Add note
+// Input
+const noteInput = document.getElementById('note-input');
+const charCount = document.getElementById('char-count');
+
+noteInput.addEventListener('input', function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,120)+'px';
+  charCount.textContent=this.value.length;
+});
+
 document.getElementById('add-btn').addEventListener('click', addNote);
-noteInput.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); addNote(); }
+noteInput.addEventListener('keydown', e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addNote();}
 });
 
 function addNote(){
@@ -351,41 +851,22 @@ function addNote(){
   const now = new Date();
   const today = now.toISOString().split('T')[0];
 
-  // Check streak
   if(state.lastNoteDate){
-    const last = new Date(state.lastNoteDate);
-    const lastDay = last.toISOString().split('T')[0];
+    const lastDay = new Date(state.lastNoteDate).toISOString().split('T')[0];
     const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    yesterday.setDate(yesterday.getDate()-1);
+    if(lastDay===today){}
+    else if(lastDay===yesterday.toISOString().split('T')[0]){state.streak++;}
+    else{state.streak=1;}
+  } else { state.streak=1; }
 
-    if(lastDay === today){
-      // Same day, no streak change
-    } else if(lastDay === yesterdayStr){
-      state.streak++;
-    } else {
-      state.streak = 1;
-    }
-  } else {
-    state.streak = 1;
-  }
-
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
   state.lastNoteDate = now.toISOString();
+  state.notes.unshift({id:Date.now(),text,date:now.toISOString(),day:today});
 
-  const note = {
-    id: Date.now(),
-    text,
-    date: now.toISOString(),
-    day: today
-  };
+  state.health = Math.min(100, state.health+10);
+  state.xp += 10 + Math.floor(text.length/15);
 
-  state.notes.unshift(note);
-
-  // Grow plant
-  state.health = Math.min(100, state.health + 8);
-  state.xp += 10 + Math.floor(text.length / 20);
-
-  // Level up check
   const xpNeeded = state.level * 50;
   if(state.xp >= xpNeeded){
     state.xp -= xpNeeded;
@@ -394,193 +875,245 @@ function addNote(){
   }
 
   save();
-  noteInput.value = '';
-  noteInput.style.height = 'auto';
-  spawnParticles();
+  noteInput.value='';
+  noteInput.style.height='auto';
+  charCount.textContent='0';
+  spawnWaterDrops();
+  spawnSparkles();
   render();
 }
 
 function deleteNote(id){
-  state.notes = state.notes.filter(n => n.id !== id);
-  save();
-  render();
+  state.notes=state.notes.filter(n=>n.id!==id);
+  save(); render();
 }
 
-function save(){
-  localStorage.setItem('growthink', JSON.stringify(state));
-}
+function save(){ localStorage.setItem('growthink',JSON.stringify(state)); }
 
-// Wither check
 function witherCheck(){
   if(!state.lastNoteDate) return;
-  const hours = (Date.now() - new Date(state.lastNoteDate).getTime()) / 3600000;
-  if(hours > 12){
-    const decay = Math.min(5, Math.floor((hours - 12) / 6) * 2);
-    state.health = Math.max(0, state.health - decay);
+  const hours=(Date.now()-new Date(state.lastNoteDate).getTime())/3600000;
+  if(hours>8){
+    const decay=Math.min(3,Math.floor((hours-8)/4));
+    state.health=Math.max(0,state.health-decay);
     save();
   }
 }
 
 // Render plant
 function renderPlant(){
-  const level = state.level;
-  const health = state.health;
-  const isWithering = health < 40;
-
+  const el = document.getElementById('plant');
+  const lvl = state.level;
+  const withering = state.health < 35;
+  const stemClass = withering ? 'stem-wither' : 'stem-healthy';
   let html = '';
-  const stemHeight = Math.min(20 + level * 12, 130);
-  html += `<div class="stem" style="height:${stemHeight}px"></div>`;
+
+  const totalHeight = Math.min(20 + lvl*14, 150);
+  const segments = Math.min(lvl, 8);
+  const segH = Math.floor(totalHeight/Math.max(segments,1));
+
+  // Build stem
+  html += `<div style="display:flex;flex-direction:column-reverse;align-items:center;position:relative;height:${totalHeight}px">`;
+
+  for(let i=0;i<segments;i++){
+    html += `<div class="stem-segment ${stemClass}" style="height:${segH}px;width:${5-i*0.2}px"></div>`;
+  }
 
   // Leaves
-  const leafCount = Math.min(Math.floor(level / 1.5), 6);
-  for(let i = 0; i < leafCount; i++){
-    const side = i % 2 === 0 ? 'left' : 'right';
-    const y = stemHeight - 15 - (i * (stemHeight / (leafCount + 1)));
-    const size = Math.max(12, 20 - i * 1.5);
-    html += `<div class="leaf leaf-${side}" style="position:absolute;bottom:${y}px;border-${side === 'left' ? 'right' : 'left'}-width:${size}px;border-top-width:${size/2.5}px;border-bottom-width:${size/2.5}px"></div>`;
+  const leafCount = Math.min(Math.floor(lvl*0.8)+1, 8);
+  const leafColors = withering ? ['#8B7355','#7f6b3e'] : ['#27ae60','#2ecc71','#00b894','#1abc9c'];
+
+  for(let i=0;i<leafCount;i++){
+    const side = i%2===0 ? 'left' : 'right';
+    const y = 10 + (i*(totalHeight-20)/(leafCount));
+    const size = Math.max(18, 30-i*2);
+    const color = leafColors[i%leafColors.length];
+    const sway = side==='left' ? 'sway-left' : 'sway-right';
+    const xOff = side==='left' ? -(size+2) : 5;
+    const rotate = side==='left' ? 'rotate(30deg)' : 'rotate(-30deg)';
+
+    html += `<svg class="leaf-svg ${sway}" style="position:absolute;bottom:${y}px;${side}:${side==='left'?-size-2:5}px;width:${size}px;height:${size*0.6}px;animation-delay:${i*0.3}s" viewBox="0 0 40 24">
+      <path d="${side==='left'?'M40,12 Q20,0 0,12 Q20,24 40,12':'M0,12 Q20,0 40,12 Q20,24 0,12'}" fill="${color}" opacity="0.9"/>
+      <path d="${side==='left'?'M40,12 Q30,12 10,12':'M0,12 Q10,12 30,12'}" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" fill="none"/>
+    </svg>`;
   }
 
-  // Flower (level 5+)
-  if(level >= 5){
-    const flowerSize = Math.min(10 + (level - 5) * 3, 35);
-    html += `<div class="flower" style="width:${flowerSize}px;height:${flowerSize}px;position:absolute;bottom:${stemHeight}px;left:50%;transform:translateX(-50%)">`;
-    const petalCount = Math.min(4 + Math.floor((level-5)/2), 8);
-    for(let i = 0; i < petalCount; i++){
-      const angle = (360 / petalCount) * i;
-      const colors = ['#f39c12','#e74c3c','#9b59b6','#3498db','#e91e63','#ff6b6b'];
-      const color = colors[i % colors.length];
-      const r = flowerSize * 0.35;
-      const x = Math.cos(angle * Math.PI/180) * r + flowerSize/2 - 6;
-      const y = Math.sin(angle * Math.PI/180) * r + flowerSize/2 - 6;
-      html += `<div class="petal" style="left:${x}px;top:${y}px;background:${color};width:${flowerSize*0.4}px;height:${flowerSize*0.4}px"></div>`;
+  // Flower (level 4+)
+  if(lvl >= 4){
+    const fSize = Math.min(12 + (lvl-4)*4, 45);
+    const petalCount = Math.min(5 + Math.floor((lvl-4)/2), 10);
+    const petalColors = ['#ff6b6b','#feca57','#ff9ff3','#48dbfb','#ff9f43','#f368e0','#0abde3'];
+
+    html += `<div class="flower-container" style="width:${fSize}px;height:${fSize}px;top:${-fSize/2}px">`;
+    html += `<div class="flower-petal-ring" style="width:${fSize}px;height:${fSize}px;position:relative">`;
+
+    for(let i=0;i<petalCount;i++){
+      const angle = (360/petalCount)*i;
+      const pSize = fSize*0.38;
+      const r = fSize*0.3;
+      const x = Math.cos(angle*Math.PI/180)*r + fSize/2 - pSize/2;
+      const y = Math.sin(angle*Math.PI/180)*r + fSize/2 - pSize/2;
+      const color = petalColors[i%petalColors.length];
+      html += `<div class="flower-petal" style="left:${x}px;top:${y}px;width:${pSize}px;height:${pSize}px;background:${color};border-radius:50%;opacity:0.85;transform:rotate(${angle}deg)"></div>`;
     }
-    html += `<div class="flower-center" style="width:${flowerSize*0.35}px;height:${flowerSize*0.35}px"></div></div>`;
+
+    html += `<div class="flower-center-dot" style="width:${fSize*0.3}px;height:${fSize*0.3}px"></div>`;
+    html += `</div></div>`;
   }
 
-  plantEl.innerHTML = html;
-  plantEl.className = 'plant' + (isWithering ? ' withering' : '');
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 function renderHealth(){
   const h = state.health;
-  healthFill.style.width = h + '%';
-  healthFill.style.background = h > 60 ? 'linear-gradient(90deg,#00b894,#55efc4)' : h > 30 ? 'linear-gradient(90deg,#f39c12,#fdcb6e)' : 'linear-gradient(90deg,#e74c3c,#ff7675)';
-  healthValue.textContent = Math.round(h) + '%';
+  const fill = document.getElementById('health-fill');
+  const val = document.getElementById('health-value');
+  const icon = document.getElementById('health-icon');
+  fill.style.width = h+'%';
+  fill.style.background = h>60?'linear-gradient(90deg,#00e6a7,#00c9ff)':h>30?'linear-gradient(90deg,#ffa502,#fdcb6e)':'linear-gradient(90deg,#ff4757,#ff6b81)';
+  val.textContent = Math.round(h)+'%';
+  icon.textContent = h>60?'💚':h>30?'💛':'❤️‍🩹';
+}
+
+function renderXP(){
+  const needed = state.level * 50;
+  const pct = Math.min((state.xp/needed)*100, 100);
+  document.getElementById('xp-fill').style.width = pct+'%';
+  document.getElementById('xp-level').textContent = state.level;
+  document.getElementById('xp-text').textContent = `${state.xp} / ${needed} XP`;
 }
 
 function renderStats(){
+  const today = new Date().toISOString().split('T')[0];
+  const todayCount = state.notes.filter(n=>n.day===today).length;
   document.getElementById('stat-notes').textContent = state.notes.length;
   document.getElementById('stat-streak').textContent = state.streak;
-  document.getElementById('stat-level').textContent = state.level;
+  document.getElementById('stat-today').textContent = todayCount;
+  document.getElementById('stat-best').textContent = state.bestStreak;
 
+  const badge = document.getElementById('streak-badge');
   if(state.streak > 1){
-    streakEl.textContent = `🔥 ${state.streak} day streak! Keep it going!`;
-  } else if(state.notes.length === 0){
-    streakEl.textContent = 'Start writing to grow your plant!';
-  } else {
-    streakEl.textContent = '🌱 Write daily to build your streak';
-  }
+    badge.style.display='inline-flex';
+    document.getElementById('streak-text').textContent = state.streak+' day streak!';
+  } else { badge.style.display='none'; }
+}
+
+function renderQuote(){
+  document.getElementById('quote').textContent = quotes[Math.floor(Math.random()*quotes.length)];
 }
 
 function renderTodayNotes(){
   const today = new Date().toISOString().split('T')[0];
-  const todayList = state.notes.filter(n => n.day === today);
+  const list = state.notes.filter(n=>n.day===today);
+  const el = document.getElementById('today-notes');
 
-  if(todayList.length === 0){
-    todayNotes.innerHTML = '<div class="empty-state"><div class="emoji">🌿</div><p>No notes yet today.<br>Write something to feed your plant!</p></div>';
+  if(!list.length){
+    el.innerHTML='<div class="empty-state"><div class="emoji">🌿</div><p>No notes yet today.<br>Write something to grow your plant!</p></div>';
     return;
   }
 
-  todayNotes.innerHTML = todayList.map(n => `
+  el.innerHTML = list.map(n=>`
     <div class="note-card">
-      <div class="note-text">${escHtml(n.text)}</div>
+      <div class="note-text">${esc(n.text)}</div>
       <div class="note-meta">
-        <span>${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+        <span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
         <button class="delete-btn" onclick="deleteNote(${n.id})">✕</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function renderAllNotes(){
-  if(state.notes.length === 0){
-    allNotes.innerHTML = '<div class="empty-state"><div class="emoji">📝</div><p>Your notes will appear here</p></div>';
+  const el = document.getElementById('all-notes');
+  if(!state.notes.length){
+    el.innerHTML='<div class="empty-state"><div class="emoji">📝</div><p>Your notes will appear here</p></div>';
     return;
   }
+  const grouped={};
+  state.notes.forEach(n=>{if(!grouped[n.day])grouped[n.day]=[];grouped[n.day].push(n);});
 
-  // Group by day
-  const grouped = {};
-  state.notes.forEach(n => {
-    if(!grouped[n.day]) grouped[n.day] = [];
-    grouped[n.day].push(n);
-  });
-
-  let html = '';
-  Object.keys(grouped).sort().reverse().forEach(day => {
-    const d = new Date(day + 'T12:00:00');
-    const label = isToday(d) ? 'Today' : isYesterday(d) ? 'Yesterday' : d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
-    html += `<div style="font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;padding:8px 0 4px">${label} — ${grouped[day].length} notes</div>`;
-    grouped[day].forEach(n => {
-      html += `<div class="note-card">
-        <div class="note-text">${escHtml(n.text)}</div>
-        <div class="note-meta">
-          <span>${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
-          <button class="delete-btn" onclick="deleteNote(${n.id})">✕</button>
-        </div>
-      </div>`;
+  let html='';
+  Object.keys(grouped).sort().reverse().forEach(day=>{
+    const d=new Date(day+'T12:00:00');
+    const label=isToday(d)?'Today':isYesterday(d)?'Yesterday':d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+    html+=`<div class="day-header">${label} — ${grouped[day].length} notes</div>`;
+    grouped[day].forEach(n=>{
+      html+=`<div class="note-card"><div class="note-text">${esc(n.text)}</div>
+        <div class="note-meta"><span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+        <button class="delete-btn" onclick="deleteNote(${n.id})">✕</button></div></div>`;
     });
   });
-  allNotes.innerHTML = html;
+  el.innerHTML=html;
 }
 
 function isToday(d){return d.toDateString()===new Date().toDateString()}
 function isYesterday(d){const y=new Date();y.setDate(y.getDate()-1);return d.toDateString()===y.toDateString()}
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
-function spawnParticles(){
-  const area = document.getElementById('plant-area');
-  const colors = ['#55efc4','#00b894','#81ecec','#ffeaa7','#fdcb6e'];
-  for(let i = 0; i < 8; i++){
-    setTimeout(() => {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.left = (40 + Math.random() * 20) + '%';
-      p.style.bottom = (60 + Math.random() * 20) + 'px';
-      p.style.width = p.style.height = (4 + Math.random() * 6) + 'px';
-      p.style.background = colors[Math.floor(Math.random() * colors.length)];
-      area.appendChild(p);
-      setTimeout(() => p.remove(), 2000);
-    }, i * 60);
+function spawnWaterDrops(){
+  const scene=document.getElementById('scene');
+  for(let i=0;i<5;i++){
+    setTimeout(()=>{
+      const d=document.createElement('div');
+      d.className='water-drop';
+      d.style.left=(42+Math.random()*16)+'%';
+      d.style.top='30%';
+      scene.appendChild(d);
+      setTimeout(()=>d.remove(),1200);
+    },i*100);
+  }
+}
+
+function spawnSparkles(){
+  const scene=document.getElementById('scene');
+  const colors=['#ffeaa7','#55efc4','#00c9ff','#ff9ff3','#f368e0'];
+  for(let i=0;i<12;i++){
+    setTimeout(()=>{
+      const s=document.createElement('div');
+      s.className='sparkle';
+      s.style.left=(35+Math.random()*30)+'%';
+      s.style.bottom=(40+Math.random()*30)+'%';
+      s.style.width=s.style.height=(4+Math.random()*8)+'px';
+      s.style.background=colors[Math.floor(Math.random()*colors.length)];
+      s.style.borderRadius=Math.random()>0.5?'50%':'2px';
+      scene.appendChild(s);
+      setTimeout(()=>s.remove(),1000);
+    },i*50);
   }
 }
 
 function showLevelUp(){
-  const banner = document.createElement('div');
-  banner.className = 'level-up-banner';
-  banner.innerHTML = `🌟 Level ${state.level}!<br><span style="font-size:0.9rem;font-weight:600">Your plant is thriving!</span>`;
-  document.body.appendChild(banner);
-  setTimeout(() => banner.remove(), 2200);
+  const overlay=document.createElement('div');
+  overlay.className='level-up-overlay';
+  const milestones={3:'🌿 First Sprout!',4:'🌸 First Bloom!',5:'🌺 Flourishing!',8:'🌳 Mighty Tree!',10:'👑 Plant Master!'};
+  const msg=milestones[state.level]||'🌟 Growing Strong!';
+  overlay.innerHTML=`<div class="level-up-card">
+    <div class="lu-icon">🎉</div>
+    <div class="lu-title">Level ${state.level}!</div>
+    <div class="lu-sub">${msg}</div>
+    <button onclick="this.closest('.level-up-overlay').remove()">Continue</button>
+  </div>`;
+  document.body.appendChild(overlay);
 }
 
 function render(){
   witherCheck();
   renderPlant();
   renderHealth();
+  renderXP();
   renderStats();
   renderTodayNotes();
 }
 
-// Auto-resize textarea
-noteInput.addEventListener('input', function(){
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-});
-
-// Wither timer
-setInterval(() => { witherCheck(); renderHealth(); renderPlant(); }, 60000);
-
 // Init
+initScene();
+renderQuote();
 render();
+
+// Wither check every minute
+setInterval(()=>{witherCheck();renderHealth();renderPlant();},60000);
+// New quote every 5 min
+setInterval(renderQuote,300000);
 </script>
 
 </body>
