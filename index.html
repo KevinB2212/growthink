@@ -529,12 +529,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <button class="cat-btn cat-journal" data-cat="journal" onclick="pickCat('journal')">📓 Journal</button>
     </div>
 
-    <!-- Habits -->
-    <div class="habits-card glass" id="habits-card">
-      <div style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:6px">DAILY HABITS</div>
-      <div id="habits-list"></div>
-    </div>
-
     <div class="prompt-card glass" id="prompt-card" onclick="usePrompt()">
       <div class="prompt-label">✨ Daily Prompt</div>
       <div id="prompt-text"></div>
@@ -1169,7 +1163,7 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(
 (function(){const old=localStorage.getItem('growthink');if(old&&!localStorage.getItem('gt_state')){const o=JSON.parse(old);S.notes=o.notes||[];S.health=o.health||100;S.level=o.level||1;S.xp=o.xp||0;S.streak=o.streak||0;S.best=o.bestStreak||o.streak||0;S.lastNote=o.lastNoteDate;S.notes.forEach(n=>{if(!n.tags)n.tags=[];if(!n.mood)n.mood='';if(n.pinned===undefined)n.pinned=false;});save();}})();
 
 // ===== INIT =====
-initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();renderHabits();checkFreeze();applySeasonal();applyCosmetics();render();
+initScene();initMoods();renderQuote();renderPrompt();applyTheme();renderNotion();checkBadges();renderBadgeCount();checkFreeze();applySeasonal();applyCosmetics();render();
 // Try weather
 setTimeout(fetchWeather,2000);
 setInterval(()=>{witherCheck();renderH();renderPlant();updateSky();},60000);
