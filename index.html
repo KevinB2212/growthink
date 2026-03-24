@@ -1183,22 +1183,7 @@ function applyWeather(w){
 }
 
 // ===== SEASONAL EVENTS =====
-function applySeasonal(){
-  const month=new Date().getMonth();const el=document.getElementById('seasonal-decos');
-  const scene=document.getElementById('scene');
-  if(month===11||month===0){// Dec-Jan: Winter
-    let s='';for(let i=0;i<5;i++)s+=`<div class="seasonal-deco" style="left:${10+Math.random()*80}%;top:${5+Math.random()*30}%;animation-delay:${Math.random()*6}s;font-size:${.8+Math.random()*.6}rem">❄️</div>`;
-    el.innerHTML=s;
-  } else if(month>=2&&month<=4){// Mar-May: Spring
-    let s='';const flowers=['🌸','🌺','🌼','🦋'];for(let i=0;i<4;i++)s+=`<div class="seasonal-deco" style="left:${5+Math.random()*90}%;top:${5+Math.random()*25}%;animation-delay:${Math.random()*6}s;font-size:${.7+Math.random()*.5}rem">${flowers[i%flowers.length]}</div>`;
-    el.innerHTML=s;
-  } else if(month>=5&&month<=7){// Jun-Aug: Summer
-    el.innerHTML='';// Clear summer sky
-  } else if(month>=8&&month<=10){// Sep-Nov: Autumn
-    let s='';const leaves=['🍂','🍁','🎃'];for(let i=0;i<4;i++)s+=`<div class="seasonal-deco" style="left:${10+Math.random()*80}%;top:${10+Math.random()*20}%;animation-delay:${Math.random()*6}s">${leaves[i%leaves.length]}</div>`;
-    el.innerHTML=s;
-  }
-}
+function applySeasonal(){}
 
 // ===== CHAT =====
 const CI=document.getElementById('chat-input'),CM=document.getElementById('chat-msgs');
