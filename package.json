@@ -1,0 +1,13 @@
+{
+  "name": "growthink",
+  "version": "5.0.0",
+  "description": "A mindful note-taking app with a living plant",
+  "scripts": {
+    "dev": "vite",
+    "build": "bash build.sh",
+    "preview": "vite preview",
+    "minify": "bash build.sh"
+  },
+  "author": "Kevin",
+  "license": "MIT"
+}
