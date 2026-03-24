@@ -314,13 +314,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .cat-work.active{background:#3b82f6;border-color:#3b82f6}.cat-personal.active{background:#a855f7;border-color:#a855f7}.cat-ideas.active{background:#f97316;border-color:#f97316}.cat-journal.active{background:#ec4899;border-color:#ec4899}
 .note-cat{font-size:.6rem;padding:1px 6px;border-radius:6px;font-weight:700;margin-right:4px}
 
-/* Habit Tracker */
-.habits-card{padding:14px 16px;margin-bottom:8px;border-radius:16px}
-.habit-row{display:flex;align-items:center;gap:10px;padding:6px 0}
-.habit-check{width:24px;height:24px;border-radius:8px;border:2px solid rgba(255,255,255,.15);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s}
-.habit-check.done{border-color:var(--accent);background:var(--glow)}
-.habit-name{font-size:.85rem;flex:1}.habit-streak{font-size:.7rem;color:rgba(255,255,255,.3)}
-
 /* Shop */
 .shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .shop-item{padding:14px;border-radius:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
@@ -448,9 +441,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 <div class="top-btns" style="left:16px;right:auto">
   <button class="top-btn" id="capsule-open" title="Time Capsules">⏰</button>
   <button class="top-btn" id="pomo-open" title="Pomodoro">⏱️</button>
+  <button class="top-btn" id="share-open" title="Share">📤</button>
 </div>
 <div class="top-btns">
-  <button class="top-btn" id="share-open" title="Share">📤</button>
   <button class="top-btn" id="badges-open" title="Achievements" style="position:relative">🏆<span class="badge-count" id="badge-count" style="display:none">0</span></button>
   <button class="top-btn" id="settings-open" title="Settings">⚙️</button>
 </div>
@@ -630,6 +623,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <button class="tab" data-tab="history">📚</button>
     <button class="tab" data-tab="goals">🎯</button>
     <button class="tab" data-tab="shop">🏪</button>
+    <button class="tab" data-tab="notion">📓</button>
   </div>
 
   <!-- Write -->
@@ -780,7 +774,7 @@ const BADGES=[
 const PROMPTS=['What are you grateful for today?','What\'s one thing you learned recently?','Describe your perfect day.','What goal are you working towards?','What made you smile today?','Write about a challenge you overcame.','What would you tell your future self?','What\'s inspiring you right now?','Describe something beautiful you saw today.','What\'s one small win from today?'];
 const QUOTES=['"The best time to plant a tree was 20 years ago."','"Small daily improvements lead to staggering results."','"Your mind is a garden, your thoughts are the seeds."','"What you plant now, you will harvest later."','"The expert in anything was once a beginner."','"Consistency transforms average into excellence."','"One note a day keeps the withering away. 🌱"','"Growth is never by mere chance."'];
 
-function save(){localStorage.setItem('gt_state',JSON.stringify(S));}
+function save(){try{localStorage.setItem('gt_state',JSON.stringify(S));}catch(e){if(e.name==='QuotaExceededError'){alert('Storage full! Try removing old photo/voice notes.');}}}
 function saveC(){localStorage.setItem('gt_config',JSON.stringify(C));}
 
 // ===== THEME =====
@@ -866,7 +860,7 @@ function initMoods(){document.getElementById('mood-bar').innerHTML=MOODS.map(m=>
 function pickMood(m){C.mood=C.mood===m?'':m;saveC();document.querySelectorAll('.mood-btn').forEach(b=>b.classList.toggle('selected',b.dataset.mood===C.mood));}
 
 // ===== TABS =====
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();if(t.dataset.tab==='shop')renderShop();if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='goals'){renderChallenges();renderGoals();}}));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');if(t.dataset.tab==='history')renderHistory();if(t.dataset.tab==='insights')renderInsights();if(t.dataset.tab==='shop')renderShop();if(t.dataset.tab==='goals'){renderChallenges();renderGoals();}}));
 
 // ===== INPUT =====
 const NI=document.getElementById('note-input'),CC=document.getElementById('char-count');
@@ -874,20 +868,7 @@ NI.addEventListener('input',function(){this.style.height='auto';this.style.heigh
 document.getElementById('add-btn').addEventListener('click',addNote);
 NI.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addNote();}});
 
-function addNote(){
-  const text=NI.value.trim();if(!text)return;
-  const now=new Date(),today=now.toISOString().split('T')[0];
-  if(S.lastNote){const ld=new Date(S.lastNote).toISOString().split('T')[0],y=new Date(now);y.setDate(y.getDate()-1);if(ld!==today){S.streak=ld===y.toISOString().split('T')[0]?S.streak+1:1;}}else S.streak=1;
-  S.best=Math.max(S.best,S.streak);S.lastNote=now.toISOString();
-  const tags=(text.match(/#\w+/g)||[]).map(t=>t.toLowerCase());
-  S.notes.unshift({id:Date.now(),text,date:now.toISOString(),day:today,mood:C.mood||'',tags,pinned:false,cat:C.cat||''});
-  S.health=Math.min(100,S.health+10);S.xp+=10+Math.floor(text.length/15);
-  if(S.xp>=S.level*50){S.xp-=S.level*50;S.level++;showLevelUp();}
-  checkBadges();save();NI.value='';NI.style.height='auto';CC.textContent='0';C.mood='';saveC();
-  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
-  if(C.particles){spawnDrops();spawnSparkles();}render();
-  if(nC.autoSync&&nC.connected)syncNote(S.notes[0]);
-}
+// addNote defined below with media support
 
 function deleteNote(id){S.notes=S.notes.filter(n=>n.id!==id);save();render();}
 function togglePin(id){const n=S.notes.find(n=>n.id===id);if(n){n.pinned=!n.pinned;save();render();}}
@@ -909,7 +890,10 @@ function noteHTML(n){
   const mood=n.mood?`<span class="mood-indicator">${n.mood}</span>`:'';
   const catColors={work:'#3b82f6',personal:'#a855f7',ideas:'#f97316',journal:'#ec4899'};
   const catLabel=n.cat?`<span class="note-cat" style="background:${catColors[n.cat]||'#888'}20;color:${catColors[n.cat]||'#888'}">${n.cat}</span>`:'';
-  return `<div class="note-card glass${n.pinned?' pinned':''}"><div class="note-text">${catLabel}${mood}${md(n.text)}</div>${tags}<div class="note-meta"><span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div class="note-actions"><button class="note-act-btn${n.pinned?' pinned-btn':''}" onclick="togglePin(${n.id})" title="Pin">📌</button><button class="note-act-btn" onclick="deleteNote(${n.id})">✕</button></div></div></div>`;
+  let media='';
+  if(n.photo)media+=`<div class="note-media"><img src="${n.photo}" loading="lazy"></div>`;
+  if(n.voice)media+=`<div class="note-media"><audio controls src="${n.voice}"></audio></div>`;
+  return `<div class="note-card glass${n.pinned?' pinned':''}"><div class="note-text">${catLabel}${mood}${md(n.text)}</div>${media}${tags}<div class="note-meta"><span class="note-time">🕐 ${new Date(n.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div class="note-actions"><button class="note-act-btn${n.pinned?' pinned-btn':''}" onclick="togglePin(${n.id})" title="Pin">📌</button><button class="note-act-btn" onclick="deleteNote(${n.id})">✕</button></div></div></div>`;
 }
 
 function renderMain(){
@@ -1105,25 +1089,7 @@ function applyCosmetics(){
   } else fxEl.innerHTML='';
 }
 
-// ===== HABITS =====
-const DEFAULT_HABITS=[{id:'water',name:'💧 Drink Water',icon:'💧'},{id:'exercise',name:'🏃 Exercise',icon:'🏃'},{id:'read',name:'📖 Read',icon:'📖'},{id:'meditate',name:'🧘 Meditate',icon:'🧘'}];
-function getHabits(){return S.habits||DEFAULT_HABITS.map(h=>({...h,done:{}}));}
-function renderHabits(){
-  const habits=getHabits();const today=new Date().toISOString().split('T')[0];
-  document.getElementById('habits-list').innerHTML=habits.map((h,i)=>{
-    const done=h.done?.[today];
-    let streak=0;for(let d=0;d<30;d++){const dd=new Date();dd.setDate(dd.getDate()-d);if(h.done?.[dd.toISOString().split('T')[0]])streak++;else break;}
-    return `<div class="habit-row"><button class="habit-check${done?' done':''}" onclick="toggleHabit(${i})">${done?'✓':''}</button><span class="habit-name">${h.name}</span><span class="habit-streak">${streak>0?streak+'d':''}</span></div>`;
-  }).join('');
-}
-function toggleHabit(i){
-  if(!S.habits)S.habits=DEFAULT_HABITS.map(h=>({...h,done:{}}));
-  const today=new Date().toISOString().split('T')[0];
-  if(!S.habits[i].done)S.habits[i].done={};
-  S.habits[i].done[today]=!S.habits[i].done[today];
-  if(S.habits[i].done[today]){S.xp+=5;renderXP();}// Bonus XP
-  save();renderHabits();
-}
+// ===== HABITS (removed from UI) =====
 
 // ===== CATEGORIES =====
 function pickCat(cat){C.cat=C.cat===cat?'':cat;saveC();document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===C.cat));}
@@ -1423,7 +1389,11 @@ function sharePlant(){
 let pendingPhoto=null;
 function takePhoto(){
   const input=document.createElement('input');input.type='file';input.accept='image/*';input.capture='environment';
-  input.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{pendingPhoto=ev.target.result;NI.placeholder='📷 Photo attached! Add a caption...';NI.focus();};reader.readAsDataURL(file);};
+  input.onchange=e=>{const file=e.target.files[0];if(!file)return;
+    // Compress to max 300px wide to save localStorage space
+    const img=new Image();const reader=new FileReader();
+    reader.onload=ev=>{img.onload=()=>{const canvas=document.createElement('canvas');const maxW=300;const scale=Math.min(maxW/img.width,1);canvas.width=img.width*scale;canvas.height=img.height*scale;canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);pendingPhoto=canvas.toDataURL('image/jpeg',0.7);NI.placeholder='📷 Photo attached! Add a caption...';NI.focus();};img.src=ev.target.result;};
+    reader.readAsDataURL(file);};
   input.click();
 }
 
@@ -1464,9 +1434,8 @@ function pinSubmit(){
 }
 function updatePinDots(){document.querySelectorAll('#pin-dots .pin-dot').forEach((d,i)=>d.classList.toggle('filled',i<pinBuffer.length));}
 
-// ===== UPDATE ADDNOTE WITH MEDIA =====
-const origAddNote2=addNote;
-addNote=function(){
+// ===== ADD NOTE (with media support) =====
+function addNote(){
   const text=NI.value.trim();if(!text&&!pendingPhoto&&!pendingVoice)return;
   const now=new Date(),today=now.toISOString().split('T')[0];
   if(S.lastNote){const ld=new Date(S.lastNote).toISOString().split('T')[0],y=new Date(now);y.setDate(y.getDate()-1);if(ld!==today){S.streak=ld===y.toISOString().split('T')[0]?S.streak+1:1;}}else S.streak=1;
@@ -1483,17 +1452,9 @@ addNote=function(){
   if(C.particles){spawnDrops();spawnSparkles();}
   petReact();plantReact();render();renderChallenges();
   if(nC.autoSync&&nC.connected)syncNote(S.notes[0]);
-};
+}
 
-// ===== UPDATE NOTE HTML WITH MEDIA =====
-const origNoteHTML=noteHTML;
-noteHTML=function(n){
-  const base=origNoteHTML(n);
-  let media='';
-  if(n.photo)media+=`<div class="note-media"><img src="${n.photo}" loading="lazy"></div>`;
-  if(n.voice)media+=`<div class="note-media"><audio controls src="${n.voice}"></audio></div>`;
-  return base.replace('</div></div></div>',media+'</div></div></div>');
-};
+// Media support integrated into noteHTML directly
 
 // ===== UTILS =====
 function isToday(d){return d.toDateString()===new Date().toDateString()}
