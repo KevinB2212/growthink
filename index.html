@@ -672,6 +672,133 @@ body {
 .tab-content { display: none; flex-direction: column; flex: 1; }
 .tab-content.active { display: flex; }
 
+/* Notion */
+.notion-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.notion-steps {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 16px 0;
+}
+
+.notion-step {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.85rem;
+}
+
+.step-num {
+  width: 24px; height: 24px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 800;
+  flex-shrink: 0;
+}
+
+.notion-field {
+  margin: 12px 0;
+}
+
+.notion-field label {
+  display: block;
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notion-field input {
+  width: 100%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  padding: 10px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+
+.notion-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notion-connect-btn {
+  width: 100%;
+  padding: 12px;
+  border: none; border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a1a;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(0,230,167,0.25);
+  margin-top: 8px;
+}
+
+.notion-connect-btn:active { transform: scale(0.97); }
+
+.notion-disconnect-btn {
+  background: rgba(255,71,87,0.1);
+  border: 1px solid rgba(255,71,87,0.2);
+  color: var(--danger);
+  padding: 6px 14px; border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  cursor: pointer;
+}
+
+.notion-actions {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.notion-action-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+}
+
+.notion-action-btn:active { transform: scale(0.98); border-color: var(--accent); }
+
+.action-icon { font-size: 1.3rem; }
+.action-desc {
+  display: block;
+  font-size: 0.72rem; font-weight: 400;
+  color: var(--muted); margin-top: 2px;
+}
+
+.sync-log-entry {
+  font-size: 0.78rem;
+  padding: 8px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  animation: cardSlide 0.3s ease;
+}
+
+.sync-log-entry.success { border-left: 3px solid var(--accent); }
+.sync-log-entry.error { border-left: 3px solid var(--danger); }
+.sync-log-entry.info { border-left: 3px solid var(--accent2); }
+
 /* Chat */
 .chat-messages {
   flex: 1; overflow-y: auto;
@@ -960,6 +1087,7 @@ body {
     <button class="tab active" data-tab="write">✏️ Write</button>
     <button class="tab" data-tab="chat">🤖 AI Chat</button>
     <button class="tab" data-tab="history">📚 History</button>
+    <button class="tab" data-tab="notion">📓 Notion</button>
   </div>
 
   <!-- Write tab -->
@@ -1005,6 +1133,90 @@ body {
       <button id="chat-send" class="send-btn">
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
+    </div>
+  </div>
+
+  <!-- Notion tab -->
+  <div class="tab-content" id="tab-notion">
+    <!-- Setup view -->
+    <div id="notion-setup">
+      <div class="notion-card">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:2.5rem">📓</div>
+          <h3 style="font-size:1.1rem;font-weight:800;margin:8px 0 4px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Connect to Notion</h3>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.5">Sync your notes to a Notion database</p>
+        </div>
+        <div class="notion-steps">
+          <div class="notion-step">
+            <span class="step-num">1</span>
+            <div>
+              <b>Create an integration</b><br>
+              <a href="https://notion.so/my-integrations" target="_blank" style="color:var(--accent);font-size:0.8rem">notion.so/my-integrations →</a>
+            </div>
+          </div>
+          <div class="notion-step">
+            <span class="step-num">2</span>
+            <div>
+              <b>Copy the API key</b><br>
+              <span style="font-size:0.78rem;color:var(--muted)">Starts with ntn_ or secret_</span>
+            </div>
+          </div>
+          <div class="notion-step">
+            <span class="step-num">3</span>
+            <div>
+              <b>Share a database</b><br>
+              <span style="font-size:0.78rem;color:var(--muted)">Open your database → ··· → Connect to → your integration</span>
+            </div>
+          </div>
+        </div>
+        <div class="notion-field">
+          <label>API Key</label>
+          <input type="password" id="notion-key" placeholder="ntn_..." autocomplete="off">
+        </div>
+        <div class="notion-field">
+          <label>Database ID</label>
+          <input type="text" id="notion-db-id" placeholder="Paste database ID or URL" autocomplete="off">
+          <span style="font-size:0.7rem;color:var(--muted);margin-top:4px;display:block">From the URL: notion.so/<b>database-id</b>?v=...</span>
+        </div>
+        <button class="notion-connect-btn" id="notion-connect">Connect & Test 🔗</button>
+        <div id="notion-status" style="display:none;margin-top:10px;font-size:0.8rem;text-align:center;padding:8px;border-radius:10px"></div>
+      </div>
+    </div>
+
+    <!-- Connected view -->
+    <div id="notion-connected" style="display:none">
+      <div class="notion-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.2rem">📓</div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem" id="notion-db-name">Connected</div>
+              <div style="font-size:0.7rem;color:var(--muted)" id="notion-db-info">Syncing notes</div>
+            </div>
+          </div>
+          <button class="notion-disconnect-btn" id="notion-disconnect">Disconnect</button>
+        </div>
+      </div>
+
+      <div class="notion-actions">
+        <button class="notion-action-btn" id="notion-sync-all">
+          <span class="action-icon">🔄</span>
+          <span>Sync All Notes</span>
+          <span class="action-desc">Push all notes to Notion</span>
+        </button>
+        <button class="notion-action-btn" id="notion-sync-today">
+          <span class="action-icon">📅</span>
+          <span>Sync Today</span>
+          <span class="action-desc">Push only today's notes</span>
+        </button>
+        <button class="notion-action-btn" id="notion-auto-toggle">
+          <span class="action-icon" id="auto-sync-icon">⏸️</span>
+          <span id="auto-sync-label">Auto-Sync: Off</span>
+          <span class="action-desc">Automatically sync new notes</span>
+        </button>
+      </div>
+
+      <div id="notion-sync-log" class="notes-list" style="margin-top:8px"></div>
     </div>
   </div>
 
@@ -1702,6 +1914,243 @@ function setupMic(btnId, targetId, indicatorId) {
 
 setupMic('mic-write', 'note-input', 'rec-write');
 setupMic('mic-chat', 'chat-input', 'rec-chat');
+
+// Notion Integration
+const CORS_PROXY = 'https://corsproxy.io/?';
+let notionConfig = JSON.parse(localStorage.getItem('growthink_notion') || 'null') || {
+  key: '', dbId: '', dbName: '', connected: false, autoSync: false, syncedIds: []
+};
+
+function saveNotionConfig() {
+  localStorage.setItem('growthink_notion', JSON.stringify(notionConfig));
+}
+
+function notionApi(endpoint, method, body) {
+  const url = `${CORS_PROXY}${encodeURIComponent('https://api.notion.com/v1/' + endpoint)}`;
+  return fetch(url, {
+    method: method || 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + notionConfig.key,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  }).then(r => r.json());
+}
+
+function notionLog(msg, type) {
+  const log = document.getElementById('notion-sync-log');
+  const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  const entry = document.createElement('div');
+  entry.className = 'sync-log-entry ' + (type || 'info');
+  entry.textContent = `[${time}] ${msg}`;
+  log.prepend(entry);
+}
+
+// Extract database ID from URL or raw ID
+function parseDbId(input) {
+  input = input.trim();
+  // URL format: notion.so/xxx/DATABASE_ID?v=...
+  const urlMatch = input.match(/([a-f0-9]{32})/);
+  if (urlMatch) return urlMatch[1];
+  // UUID with dashes
+  const uuidMatch = input.match(/([a-f0-9\-]{36})/);
+  if (uuidMatch) return uuidMatch[1].replace(/-/g, '');
+  return input.replace(/-/g, '');
+}
+
+// Connect button
+document.getElementById('notion-connect').addEventListener('click', async () => {
+  const key = document.getElementById('notion-key').value.trim();
+  const rawDb = document.getElementById('notion-db-id').value.trim();
+  const statusEl = document.getElementById('notion-status');
+
+  if (!key || !rawDb) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'rgba(255,71,87,0.1)';
+    statusEl.style.color = '#ff4757';
+    statusEl.textContent = '⚠️ Please fill in both fields';
+    return;
+  }
+
+  const dbId = parseDbId(rawDb);
+  notionConfig.key = key;
+  notionConfig.dbId = dbId;
+
+  statusEl.style.display = 'block';
+  statusEl.style.background = 'rgba(0,230,167,0.1)';
+  statusEl.style.color = 'var(--accent)';
+  statusEl.textContent = '⏳ Testing connection...';
+
+  try {
+    const res = await notionApi('databases/' + dbId, 'GET');
+    if (res.object === 'database') {
+      notionConfig.connected = true;
+      notionConfig.dbName = res.title?.[0]?.plain_text || 'Notion Database';
+      saveNotionConfig();
+      renderNotionTab();
+      statusEl.textContent = '✅ Connected!';
+    } else if (res.object === 'error') {
+      statusEl.style.background = 'rgba(255,71,87,0.1)';
+      statusEl.style.color = '#ff4757';
+      statusEl.textContent = '❌ ' + (res.message || 'Could not connect. Check your key and database ID.');
+    } else {
+      statusEl.style.background = 'rgba(255,71,87,0.1)';
+      statusEl.style.color = '#ff4757';
+      statusEl.textContent = '❌ Unexpected response. Make sure the database is shared with your integration.';
+    }
+  } catch (e) {
+    statusEl.style.background = 'rgba(255,71,87,0.1)';
+    statusEl.style.color = '#ff4757';
+    statusEl.textContent = '❌ Network error: ' + e.message;
+  }
+});
+
+// Disconnect
+document.getElementById('notion-disconnect').addEventListener('click', () => {
+  notionConfig = { key: '', dbId: '', dbName: '', connected: false, autoSync: false, syncedIds: [] };
+  saveNotionConfig();
+  renderNotionTab();
+});
+
+// Sync a single note to Notion
+async function syncNoteToNotion(note) {
+  if (!notionConfig.connected) return false;
+  if (notionConfig.syncedIds.includes(note.id)) return 'already';
+
+  try {
+    const res = await notionApi('pages', 'POST', {
+      parent: { database_id: notionConfig.dbId },
+      properties: {
+        Name: { title: [{ text: { content: note.text.substring(0, 100) } }] },
+        ...(hasProperty('Date') ? { Date: { date: { start: note.date } } } : {}),
+      },
+      children: [
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [{ text: { content: note.text } }]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [{ text: { content: `— GroWthink · ${new Date(note.date).toLocaleString()}` }, annotations: { italic: true, color: 'gray' } }]
+          }
+        }
+      ]
+    });
+
+    if (res.object === 'page') {
+      notionConfig.syncedIds.push(note.id);
+      saveNotionConfig();
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+function hasProperty(name) {
+  // We'll try to send Date, Notion will ignore if property doesn't exist
+  return true;
+}
+
+// Sync All
+document.getElementById('notion-sync-all').addEventListener('click', async () => {
+  if (!notionConfig.connected) return;
+  const unsynced = state.notes.filter(n => !notionConfig.syncedIds.includes(n.id));
+  notionLog(`Starting sync of ${unsynced.length} notes...`, 'info');
+
+  let success = 0, failed = 0;
+  for (const note of unsynced) {
+    const res = await syncNoteToNotion(note);
+    if (res === true) success++;
+    else if (res !== 'already') failed++;
+    // Rate limit: ~3 req/s
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  notionLog(`✅ Synced ${success} notes${failed ? `, ${failed} failed` : ''}`, success ? 'success' : 'error');
+});
+
+// Sync Today
+document.getElementById('notion-sync-today').addEventListener('click', async () => {
+  if (!notionConfig.connected) return;
+  const today = new Date().toISOString().split('T')[0];
+  const todayNotes = state.notes.filter(n => n.day === today && !notionConfig.syncedIds.includes(n.id));
+  notionLog(`Syncing ${todayNotes.length} notes from today...`, 'info');
+
+  let success = 0;
+  for (const note of todayNotes) {
+    const res = await syncNoteToNotion(note);
+    if (res === true) success++;
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  notionLog(`✅ ${success} notes synced to Notion`, 'success');
+});
+
+// Auto-sync toggle
+document.getElementById('notion-auto-toggle').addEventListener('click', () => {
+  notionConfig.autoSync = !notionConfig.autoSync;
+  saveNotionConfig();
+  renderAutoSync();
+  notionLog(notionConfig.autoSync ? '🔄 Auto-sync enabled' : '⏸️ Auto-sync disabled', 'info');
+});
+
+function renderAutoSync() {
+  document.getElementById('auto-sync-icon').textContent = notionConfig.autoSync ? '🔄' : '⏸️';
+  document.getElementById('auto-sync-label').textContent = 'Auto-Sync: ' + (notionConfig.autoSync ? 'On' : 'Off');
+}
+
+function renderNotionTab() {
+  if (notionConfig.connected) {
+    document.getElementById('notion-setup').style.display = 'none';
+    document.getElementById('notion-connected').style.display = 'block';
+    document.getElementById('notion-db-name').textContent = notionConfig.dbName;
+    const unsyncedCount = state.notes.filter(n => !notionConfig.syncedIds.includes(n.id)).length;
+    document.getElementById('notion-db-info').textContent = `${notionConfig.syncedIds.length} synced · ${unsyncedCount} pending`;
+    renderAutoSync();
+  } else {
+    document.getElementById('notion-setup').style.display = 'block';
+    document.getElementById('notion-connected').style.display = 'none';
+  }
+}
+
+// Hook into addNote for auto-sync
+const origAddNote = addNote;
+addNote = function() {
+  const prevLen = state.notes.length;
+  origAddNote();
+  if (notionConfig.autoSync && notionConfig.connected && state.notes.length > prevLen) {
+    const newNote = state.notes[0];
+    syncNoteToNotion(newNote).then(res => {
+      if (res === true) notionLog('🔄 Auto-synced: ' + newNote.text.substring(0, 40) + '...', 'success');
+    });
+  }
+};
+
+// Also hook saveChatNote for auto-sync
+const origSaveChatNote = saveChatNote;
+saveChatNote = function(noteId) {
+  origSaveChatNote(noteId);
+  if (notionConfig.autoSync && notionConfig.connected) {
+    setTimeout(() => {
+      const note = state.notes[0];
+      if (note) {
+        syncNoteToNotion(note).then(res => {
+          if (res === true) notionLog('🔄 Auto-synced: ' + note.text.substring(0, 40) + '...', 'success');
+        });
+      }
+    }, 500);
+  }
+};
+
+renderNotionTab();
 
 // Init
 initScene();
