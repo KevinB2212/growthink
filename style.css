@@ -282,9 +282,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 @keyframes sparkPop{0%{transform:scale(0) rotate(0);opacity:1}50%{transform:scale(1.2) rotate(180deg);opacity:.8}100%{transform:scale(0) rotate(360deg);opacity:0}}
 
 .tab-content{display:none;flex-direction:column;flex:1}.tab-content.active{display:flex}
-.footer{text-align:center;padding:20px 0 10px;margin-top:auto}
-.footer-text{font-size:.7rem;color:var(--accent);opacity:1;letter-spacing:.5px;font-weight:700}
+.footer{text-align:center;padding:20px 0 30px;margin-top:auto;position:relative;z-index:10}
+.footer-text{font-size:.75rem;color:var(--accent);opacity:1;letter-spacing:.5px;font-weight:700;line-height:2}
 .footer-text a{color:var(--accent2);font-weight:800;text-decoration:none}
+.footer-link{display:inline-block;margin-top:6px;padding:6px 16px;background:rgba(0,201,255,.1);border:1px solid rgba(0,201,255,.2);border-radius:12px;font-size:.8rem;color:var(--accent2)!important;font-weight:800;transition:all .2s}
+.footer-link:active{transform:scale(.96);background:rgba(0,201,255,.2)}
 .notes-list::-webkit-scrollbar{width:3px}.notes-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:2px}
 
 /* Writing prompt */
